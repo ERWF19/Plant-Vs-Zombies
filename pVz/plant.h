@@ -2,11 +2,19 @@
 #include <iostream>
 #include "bullet.h"
 
-const std::string IMAGE_PATH_1 = "pic/sunflower.png";
-const std::string IMAGE_PATH_2 = "pic/peashooter.png";
-const std::string IMAGE_PATH_3 = "pic/snow peashooter.png";
-const std::string IMAGE_PATH_4 = "pic/wallnut.png";
-const float PLANT_DAMAGE = 4;
+const std::string PLANT_TYPE_1 = "Sunflower";
+const std::string PLANT_TYPE_2 = "Peashooter";
+const std::string PLANT_TYPE_3 = "Snow Peashooter";
+const std::string PLANT_TYPE_4 = "Wallnut";
+
+const std::string PLANT_TYPE_1_TEXTURE_PATH = "pic/sunflower.png";
+const std::string PLANT_TYPE_2_TEXTURE_PATH = "pic/peashooter.png";
+const std::string PLANT_TYPE_3_TEXTURE_PATH = "pic/snow peashooter.png";
+const std::string PLANT_TYPE_4_TEXTURE_PATH = "pic/wallnut.png";
+const std::string PLANT_TYPE_4_CRACKED1_TEXTURE_PATH = "pic/wallnut_cracked1.png";
+const std::string PLANT_TYPE_4_CRACKED2_TEXTURE_PATH = "pic/wallnut_cracked2.png";
+
+
 const float SUNFLOWER_WIDTH = 80;
 const float SUNFLOWER_HEIGHT = 80;
 const float PEASHOOTER_WIDTH = 80;
@@ -15,9 +23,9 @@ const float SNOW_PEASHOOTER_WIDTH = 100;
 const float SNOW_PEASHOOTER_HEIGHT = 80;
 const float WALLNUT_WIDTH = 80;
 const float WALLNUT_HEIGHT = 80;
-const float SUNFLOWER_DAMAGE = 4;
-const float PEASHOOTER_DAMAGE = 4;
-const float SNOW_PEASHOOTER_DAMAGE = 4;
+const float SUNFLOWER_DAMAGE = 5;
+const float PEASHOOTER_DAMAGE = 5;
+const float SNOW_PEASHOOTER_DAMAGE = 5;
 const float WALLNUT_DAMAGE = 40;
 
 
