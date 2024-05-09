@@ -75,7 +75,7 @@ bool Line::is_Collided(Bullet *bullet)
 	sf::Vector2f bullet_position = bullet->get_Position();
 	for(int i=0 ; i<zombies.size(); i++)
 	{
-		if(zombies[i]->is_get_Shot(bullet_position))
+		if(zombies[i]->is_get_Shot(bullet_position,bullet->get_Type()))
 			return true;
 	}
 	return false;
@@ -97,7 +97,6 @@ void Line::Eat_Plant(Zombie* zombie , float current_global_time)
 	}
 	if(!zombie_eating_status)
 		zombie->go_Forward();
-
 }
 
 void Line::Clean_Square(Plant* plant)

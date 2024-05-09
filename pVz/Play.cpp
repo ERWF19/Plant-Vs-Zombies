@@ -33,7 +33,7 @@ void Play(sf::RenderWindow &window)
 			gameplay.Move_Mouse(window);
 			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				gameplay.Card_Selection(window);
+				gameplay.Card_Selection(window,global_time.getElapsedTime().asSeconds());
 			}
 			if(event.type == sf::Event::Closed)
 				window.close();
@@ -60,7 +60,7 @@ void Play(sf::RenderWindow &window)
 		gameplay.Zombie_Death();
 		gameplay.Kill_Plants(global_time.getElapsedTime().asSeconds());
 		window.clear();
-		gameplay.draw(window);
+		gameplay.draw(window,global_time.getElapsedTime().asSeconds());
 		window.display();
 	}
 }

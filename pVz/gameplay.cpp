@@ -61,14 +61,14 @@ GamePlay::GamePlay(float width , float height)
 	
 }
 
-void GamePlay::draw(sf::RenderWindow &window)
+void GamePlay::draw(sf::RenderWindow &window ,float current_global_time)
 {
 	window.draw(playground);
 	
 	for(int i=0 ; i<cards.size() ; i++)
 		window.draw(cards[i]);
 
-	Draw_Zombies(window);
+	Draw_Zombies(window,current_global_time);
 	Draw_Plants(window);
 	Draw_Bullets(window);
 }
@@ -94,7 +94,7 @@ void GamePlay::Move_Mouse(sf::RenderWindow &window)
 	}
 }
 
-void GamePlay::Card_Selection(sf::RenderWindow &window)
+void GamePlay::Card_Selection(sf::RenderWindow &window , float current_global_time)
 {
 	if(selected_card_index == 0 || selected_card_index == 1 || selected_card_index == 2 || selected_card_index == 3)
 	{
@@ -126,7 +126,7 @@ void GamePlay::Card_Selection(sf::RenderWindow &window)
 			if(!selected_statement)
 				break;
 			window.clear();
-			draw(window);
+			draw(window,current_global_time);
 			window.display();
 		}
 	}
@@ -149,11 +149,11 @@ void GamePlay::Draw_Plants(sf::RenderWindow &window)
 		plants[i]->draw(window);
 	}
 }
-void GamePlay::Draw_Zombies(sf::RenderWindow &window)
+void GamePlay::Draw_Zombies(sf::RenderWindow &window , float current_global_time)
 {
 	for(int i=0 ; i<zombies.size() ; i++)
 	{
-		zombies[i]->draw(window);
+		zombies[i]->draw(window,current_global_time);
 	}
 }
 

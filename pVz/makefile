@@ -1,4 +1,4 @@
-pvsz: main.o Menu.o Play.o gameplay.o line.o  square.o plant.o zombie.o bullet.o
+pvz: main.o Menu.o Play.o gameplay.o line.o  square.o plant.o zombie.o bullet.o
 	g++ -std=c++20 main.o Menu.o Play.o gameplay.o line.o square.o bullet.o plant.o zombie.o -o pvz.out  -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 main.o: main.cpp
@@ -32,4 +32,5 @@ zombie.o: zombie.cpp
 
 clean:
 	rm *.o pvz.out
+	
 

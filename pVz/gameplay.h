@@ -7,14 +7,14 @@
 
 const std::string PLAYGROUND_TEXTURE_PATH = "pic/playground.png";
 const std::string THROW_SOUND = "soundeffect/throw.ogg";
-const std::string ON_SUNFLOWER_CARD_PIC = "pic/on_sunflower.png";
-const std::string OFF_SUNFLOWER_CARD_PIC = "pic/off_sunflower.png";
-const std::string ON_PEASHOOTER_CARD_PIC = "pic/on_peashooter.png";
-const std::string OFF_PEASHOOTER_CARD_PIC = "pic/off_peashooter.png";
-const std::string ON_SNOW_PEASHOOTER_CARD_PIC = "pic/on_snow_peashooter.png";
-const std::string OFF_SNOW_PEASHOOTER_CARD_PIC = "pic/off_snow_peashooter.png";
-const std::string ON_WALLNUT_CARD_PIC = "pic/on_wallnut.png";
-const std::string OFF_WALLNUT_CARD_PIC = "pic/off_wallnut.png";
+const std::string ON_SUNFLOWER_CARD_PIC = "pic/cards/on_sunflower.png";
+const std::string OFF_SUNFLOWER_CARD_PIC = "pic/cards/off_sunflower.png";
+const std::string ON_PEASHOOTER_CARD_PIC = "pic/cards/on_peashooter.png";
+const std::string OFF_PEASHOOTER_CARD_PIC = "pic/cards/off_peashooter.png";
+const std::string ON_SNOW_PEASHOOTER_CARD_PIC = "pic/cards/on_snow_peashooter.png";
+const std::string OFF_SNOW_PEASHOOTER_CARD_PIC = "pic/cards/off_snow_peashooter.png";
+const std::string ON_WALLNUT_CARD_PIC = "pic/cards/on_wallnut.png";
+const std::string OFF_WALLNUT_CARD_PIC = "pic/cards/off_wallnut.png";
 
 
 const float CARD_WIDTH = 180;
@@ -28,15 +28,15 @@ class GamePlay
 {
 public:
 	GamePlay(float width , float height);
-	void draw(sf::RenderWindow &window);
+	void draw(sf::RenderWindow &window,float current_global_time);
 	void Move_Mouse(sf::RenderWindow &window);
 	void Draw_Plants(sf::RenderWindow &window);
-	void Card_Selection(sf::RenderWindow &window);
+	void Card_Selection(sf::RenderWindow &window,float current_global_time);
 	bool is_Line_Range(sf::Vector2i localPosition ,Plant *p);
 	bool grow_plant(Plant *p);
 	void Generate_Zombie();
 	void Move_Zombies();
-	void Draw_Zombies(sf::RenderWindow &window);
+	void Draw_Zombies(sf::RenderWindow &window,float current_global_time);
 	void Plants_Fire(float current_global_time);
 	Line* Find_Line(std::string line_id);
 	void Move_Bullets();
@@ -67,6 +67,4 @@ private:
 	std::vector<Bullet*> bullets;
 	sf::SoundBuffer buffer;
 	sf::Sound throw_sound;
-
-
 };

@@ -6,12 +6,13 @@ Zombie::Zombie(std::string i , std::string l_i ,float x0 ,float  y0)
 	line_id = l_i;
 	damage = ZOMBIE_TYPE_1_DAMAGE;
 	velocity = ZOMBIE_VELOCITY;
+	walk_again_velocity = ZOMBIE_VELOCITY;
 	width = ZOMBIE_TYPE_1_WIDTH;
 	height= ZOMBIE_TYPE_1_HEIGHT;
 	eating_speed = 1;
 
 	frame_index = 0;
-
+	frame_rate = FRAME_RATE;
 
 	for(int i=0 ; i<NUM_OF_FRAME_TYPE_1 ; i++)
 	{
@@ -36,25 +37,36 @@ void Zombie::Move()
 	shape.move(velocity,0);
 }
 
-void Zombie::draw(sf::RenderWindow &window)
+void Zombie::draw(sf::RenderWindow &window , float current_global_time)
 {
 	window.draw(shape);
+	if(current_global_time - last_time_change_frame >= frame_rate)
 	if(frame_index < NUM_OF_FRAME_TYPE_1)
 	{
 		frame_index ++;
-		shape.setTexture(&texture_frames[frame_index]);
+		last_time_change_frame = current_global_time;
 	}
 	else
 	{
 		frame_index = 0;
-		shape.setTexture(&texture_frames[frame_index]);
+		last_time_change_frame = current_global_time;
+
 	}
+
+	shape.setTexture(&texture_frames[frame_index]);
+
 }
 
-bool Zombie::is_get_Shot(sf::Vector2f bullet_position)
+bool Zombie::is_get_Shot(sf::Vector2f bullet_position ,std::string bullet_type)
 {
 	if(bullet_position.x >= shape.getPosition().x)
 	{
+		if(bullet_type == "Ice Bullet")
+		{
+			std::cout << "eeee" << std::endl;
+			velocity = ZOMBIE_VELOCITY/2;
+			walk_again_velocity = velocity;
+		}
 		damage --;
 		std::cout << "get_shot !" << "  damage = " << damage << std::endl;
 		return true;
@@ -75,7 +87,7 @@ void Zombie::Stop()
 
 void Zombie::go_Forward()
 {
-	velocity = ZOMBIE_VELOCITY;
+	velocity = walk_again_velocity;
 }
 
 void Zombie::Bite(float current_global_time)
