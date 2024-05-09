@@ -1,0 +1,35 @@
+pvsz: main.o Menu.o Play.o gameplay.o line.o  square.o plant.o zombie.o bullet.o
+	g++ -std=c++20 main.o Menu.o Play.o gameplay.o line.o square.o bullet.o plant.o zombie.o -o pvz.out  -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+
+main.o: main.cpp
+	g++ -std=c++20 -c main.cpp
+
+Menu.o: Menu.cpp
+	g++ -std=c++20 -c Menu.cpp
+
+Play.o: Play.cpp
+	g++ -std=c++20 -c Play.cpp
+
+gameplay.o: gameplay.cpp
+	g++ -std=c++20 -c gameplay.cpp
+
+line.o: line.cpp
+	g++ -std=c++20 -c line.cpp
+
+square.o: square.cpp
+	g++ -std=c++20 -c square.cpp
+
+bullet.o: bullet.cpp
+	g++ -std=c++20 -c bullet.cpp
+
+plant.o: plant.cpp
+	g++ -std=c++20 -c plant.cpp
+
+zombie.o: zombie.cpp
+	g++ -std=c++20 -c zombie.cpp
+
+
+
+clean:
+	rm *.o pvz.out
+
