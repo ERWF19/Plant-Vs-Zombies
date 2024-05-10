@@ -33,12 +33,12 @@ bool Line::is_Square_Range(sf::Vector2i localPosition ,Plant *p)
 	return false;
 }
 
-bool Line::grow_plant(Plant *p)
+bool Line::is_Square_Free(Plant *p)
 {
 	for(int i=0 ; i<NUM_OF_SQUARE ; i++)
 	{
 		if(squares[i]->id == p->square_id)
-			if(squares[i]->grow_plant(p))
+			if(squares[i]->is_Free(p))
 				return true;
 	}
 	return false;
@@ -86,7 +86,7 @@ void Line::Eat_Plant(Zombie* zombie , float current_global_time)
 	bool zombie_eating_status = false;
 	for(int i=0 ; i<plants.size() ; i++)
 	{
-		if(abs(zombie->get_x_Position() - (plants[i]->get_x_Position() + plants[i]->get_Width()) <= 5))
+		if(abs(zombie->get_x_Position() - (plants[i]->get_x_Position())) <= 5)
 		{
 			zombie->Stop();
 			zombie->Bite(current_global_time);

@@ -92,12 +92,12 @@ void Plant::draw(sf::RenderWindow &window)
 
 	if(name == PLANT_TYPE_4)
 	{
-		if(damage == 20)
+		if(damage == WALLNUT_CRACKED1_DAMAGE)
 		{
 			shape.setTexture(&frames_texture[1]);
 
 		}
-		else if(damage == 10)
+		else if(damage == WALLNUT_CRACKED2_DAMAGE)
 		{
 			shape.setTexture(&frames_texture[2]);
 		}

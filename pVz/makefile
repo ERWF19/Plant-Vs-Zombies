@@ -1,5 +1,5 @@
-pvz: main.o Menu.o Play.o gameover.o gameplay.o line.o  square.o plant.o zombie.o bullet.o
-	g++ -std=c++20 main.o Menu.o Play.o gameover.o gameplay.o line.o square.o bullet.o plant.o zombie.o -o pvz.out  -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+pvz: main.o Menu.o Play.o gameover.o gameplay.o line.o  square.o plant.o zombie.o bullet.o card.o
+	g++ -std=c++20 main.o Menu.o Play.o gameover.o gameplay.o line.o square.o bullet.o plant.o zombie.o card.o -o pvz.out  -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 main.o: main.cpp
 	g++ -std=c++20 -c main.cpp
@@ -31,7 +31,8 @@ plant.o: plant.cpp
 zombie.o: zombie.cpp
 	g++ -std=c++20 -c zombie.cpp
 
-
+card.o: card.cpp
+	g++ -std=c++20 -c card.cpp
 
 clean:
 	rm *.o pvz.out

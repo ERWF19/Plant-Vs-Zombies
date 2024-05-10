@@ -6,6 +6,7 @@
 
 const float MENU_WIDTH = 1212;
 const float MENU_HEIGHT = 720;
+const int FRAME_RATE_LIMIT = 60;
 const std::string Command_Type_1 = "Play";
 const std::string Command_Type_2 = "Option";
 const std::string Command_Type_3 = "Exit";
@@ -14,7 +15,7 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(MENU_WIDTH,MENU_HEIGHT),"test window");
 
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(FRAME_RATE_LIMIT);
 	
 	Menu menu(window.getSize().x,window.getSize().y);
 

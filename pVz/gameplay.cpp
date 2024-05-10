@@ -14,44 +14,11 @@ GamePlay::GamePlay(float width , float height)
 
 	for(int i=0 ; i<NUM_OF_LINE ; i++)
 	{
-		Line *l = new Line(311,138 + (SQUARE_LENGTH * i),std::to_string(i));
+		Line *l = new Line(FIRST_LINE_X_POSITION,FIRST_LINE_Y_POSITION + (SQUARE_LENGTH * i),std::to_string(i));
 		lines.push_back(l);
 	}
 
-	cards.resize(4);
-	cards[0].setSize(sf::Vector2f(CARD_WIDTH,CARD_HEIGHT));
-	cards[0].setPosition(sf::Vector2f(FIRST_CARD_COORDINATE_WIDTH,FIRST_CARD_COORDINATE_HEIGHT));
-	if(!card_1_off_texture.loadFromFile(OFF_SUNFLOWER_CARD_PIC))
-	{
-		std::cout << "error in loading card texture !" << std::endl;
-	}
-	cards[0].setTexture(&card_1_off_texture);
-
-
-	cards[1].setSize(sf::Vector2f(CARD_WIDTH - 25,CARD_HEIGHT - 20));
-	cards[1].setPosition(sf::Vector2f(FIRST_CARD_COORDINATE_WIDTH ,FIRST_CARD_COORDINATE_HEIGHT + CARD_HEIGHT + 10));
-	if(!card_2_off_texture.loadFromFile(OFF_PEASHOOTER_CARD_PIC))
-	{
-		std::cout << "error in loading card texture !" << std::endl;
-	}
-	cards[1].setTexture(&card_2_off_texture);
-
-	cards[2].setSize(sf::Vector2f(CARD_WIDTH - 30,CARD_HEIGHT - 10));
-	cards[2].setPosition(sf::Vector2f(FIRST_CARD_COORDINATE_WIDTH ,FIRST_CARD_COORDINATE_HEIGHT + (2* CARD_HEIGHT) + 20));
-	if(!card_3_off_texture.loadFromFile(OFF_SNOW_PEASHOOTER_CARD_PIC))
-	{
-		std::cout << "error in loading card texture !" << std::endl;
-	}
-	cards[2].setTexture(&card_3_off_texture);
-
-	cards[3].setSize(sf::Vector2f(CARD_WIDTH+10,CARD_HEIGHT));
-	cards[3].setPosition(sf::Vector2f(FIRST_CARD_COORDINATE_WIDTH,FIRST_CARD_COORDINATE_HEIGHT  + (3*CARD_HEIGHT) + 30));
-	if(!card_4_off_texture.loadFromFile(OFF_WALLNUT_CARD_PIC))
-	{
-		std::cout << "error in loading card texture !" << std::endl;
-	}
-	cards[3].setTexture(&card_4_off_texture);
-
+	Load_Cards();
 
 	if(!buffer.loadFromFile(THROW_SOUND))
 	{
@@ -61,15 +28,29 @@ GamePlay::GamePlay(float width , float height)
 	
 }
 
+void GamePlay::Load_Cards()
+{
+
+	Card* plant_type_1_card = new Card(PLANT_TYPE_1 ,50,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y,PLANT_TYPE_1_ON_CARD_PATH,PLANT_TYPE_1_OFF_CARD_PATH);
+	cards.push_back(plant_type_1_card);
+
+	Card* plant_type_2_card = new Card(PLANT_TYPE_2 ,100,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + CARD_HEIGHT + 10,PLANT_TYPE_2_ON_CARD_PATH,PLANT_TYPE_2_OFF_CARD_PATH);
+	cards.push_back(plant_type_2_card);
+
+	Card* plant_type_3_card = new Card(PLANT_TYPE_3 ,175,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + 2 * (CARD_HEIGHT +10),PLANT_TYPE_3_ON_CARD_PATH,PLANT_TYPE_3_OFF_CARD_PATH);
+	cards.push_back(plant_type_3_card);
+
+	Card* plant_type_4_card = new Card(PLANT_TYPE_4 ,50,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + 3 * (CARD_HEIGHT +10),PLANT_TYPE_4_ON_CARD_PATH,PLANT_TYPE_4_OFF_CARD_PATH);
+	cards.push_back(plant_type_4_card);	
+	
+}
+
 void GamePlay::draw(sf::RenderWindow &window ,float current_global_time)
 {
 	window.draw(playground);
-	
-	for(int i=0 ; i<cards.size() ; i++)
-		window.draw(cards[i]);
-
-	Draw_Zombies(window,current_global_time);
+	Draw_Cards(window);
 	Draw_Plants(window);
+	Draw_Zombies(window,current_global_time);
 	Draw_Bullets(window);
 }
 
@@ -80,7 +61,7 @@ void GamePlay::Move_Mouse(sf::RenderWindow &window)
 	for(int i=0 ; i<cards.size() ; i++)
 	{
 
-		card_position = cards[i].getPosition();
+		card_position = cards[i]->getPosition();
 		if(localPosition.x >= card_position.x && localPosition.x <= card_position.x + CARD_WIDTH
 			&& localPosition.y >= card_position.y && localPosition.y <= card_position.y + CARD_HEIGHT)
 		{
@@ -115,7 +96,7 @@ void GamePlay::Card_Selection(sf::RenderWindow &window , float current_global_ti
 					{
 						Line* plant_line = Find_Line(new_plant->line_id);
 						plant_line->Add_Plant(new_plant);
-						selected_statement =  !grow_plant(new_plant);
+						selected_statement =  !is_Valid_Square(new_plant);
 						break;
 					}
 				}
@@ -142,6 +123,14 @@ bool GamePlay::is_Line_Range(sf::Vector2i localPosition ,Plant *p)
 	
 }
 
+void GamePlay::Draw_Cards(sf::RenderWindow &window)
+{
+	for(int i=0 ; i<cards.size() ; i++)
+	{
+		cards[i]->draw(window);
+	}
+}
+
 void GamePlay::Draw_Plants(sf::RenderWindow &window)
 {
 	for(int i=0 ; i<plants.size() ; i++)
@@ -165,12 +154,14 @@ void GamePlay::Draw_Bullets(sf::RenderWindow &window)
 	}
 }
 
-bool GamePlay::grow_plant(Plant *p)
+
+
+bool GamePlay::is_Valid_Square(Plant *p)
 {
 	for(int i=0 ; i<NUM_OF_LINE ; i++)
 	{
 		if(p->line_id == lines[i]->id)
-			if(lines[i]->grow_plant(p))
+			if(lines[i]->is_Square_Free(p))
 				return true;
 	}
 	return false;
@@ -267,7 +258,7 @@ void GamePlay::Plants_Death()
 	}
 }
 
-void GamePlay::Zombie_Death()
+void GamePlay::Zombies_Death()
 {
 	for(int i=0 ; i<zombies.size() ; i++)
 	{
@@ -289,3 +280,5 @@ bool GamePlay::GameOver(float house_x_position)
 	}
 	return false;
 }
+
+

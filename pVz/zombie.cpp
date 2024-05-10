@@ -10,26 +10,46 @@ Zombie::Zombie(std::string i , std::string l_i ,float x0 ,float  y0)
 	width = ZOMBIE_TYPE_1_WIDTH;
 	height= ZOMBIE_TYPE_1_HEIGHT;
 	eating_speed = 1;
+	eat_status = false;
 
-	frame_index = 0;
+	Load_Frames();
+
+	shape.setSize(sf::Vector2f(width,height));
+	shape.setTexture(&walking_frames_texture[walking_frame_index]);
+	shape.setPosition(sf::Vector2f(x0,y0 - ZOMBIE_TYPE_1_HEIGHT/2));
+
+}
+
+void Zombie::Load_Frames()
+{
 	frame_rate = FRAME_RATE;
 
-	for(int i=0 ; i<NUM_OF_FRAME_TYPE_1 ; i++)
+
+	walking_frame_index = 0;
+	for(int i=0 ; i<NUM_OF_FRAME_TYPE_1_WALKING ; i++)
 	{
-		sf::Texture t;
+		sf::Texture walking_texture;
 		std::ostringstream path;
-		path << ZOMBIE_TYPE_1_FRAMES_ROOT << i + 1 << ".png";
-		if(!t.loadFromFile(path.str()))
+		path << ZOMBIE_TYPE_1_WALKING_FRAMES_ROOT << i + 1 << ".png";
+		if(!walking_texture.loadFromFile(path.str()))
 		{
 			std:: cout << "error in loading zombie frames texture !" << std::endl;
 		}
-		frames_texture.push_back(t);
+		walking_frames_texture.push_back(walking_texture);
 	}
 
-	shape.setSize(sf::Vector2f(width,height));
-	shape.setTexture(&frames_texture[frame_index]);
-	shape.setPosition(sf::Vector2f(x0,y0 - ZOMBIE_TYPE_1_HEIGHT/2));
-
+	eating_frame_index = 0;
+	for(int i=0 ; i<NUM_OF_FRAME_TYPE_1_EATING ; i++)
+	{
+		sf::Texture eating_texture;
+		std::ostringstream path;
+		path << ZOMBIE_TYPE_1_EATING_FRAMES_ROOT << i + 1 << ".png";
+		if(!eating_texture.loadFromFile(path.str()))
+		{
+			std:: cout << "error in loading zombie frames texture !" << std::endl;
+		}
+		eating_frames_texture.push_back(eating_texture);
+	}
 }
 
 void Zombie::Move()
@@ -40,15 +60,28 @@ void Zombie::Move()
 void Zombie::draw(sf::RenderWindow &window , float current_global_time)
 {
 	window.draw(shape);
-	if(current_global_time - last_time_change_frame >= frame_rate)
+	if(eat_status)
 	{
-		frame_index ++;
-		last_time_change_frame = current_global_time;
-		if(frame_index == NUM_OF_FRAME_TYPE_1)
-			frame_index = 0;
-		shape.setTexture(&frames_texture[frame_index]);	
+		if(current_global_time - last_time_change_frame >= frame_rate)
+		{
+			eating_frame_index ++;
+			last_time_change_frame = current_global_time;
+			if(eating_frame_index == NUM_OF_FRAME_TYPE_1_EATING)
+				eating_frame_index = 0;
+			shape.setTexture(&eating_frames_texture[eating_frame_index]);	
+		}
+	}
+	else
+	{
+		if(current_global_time - last_time_change_frame >= frame_rate)
+		{
+			walking_frame_index ++;
+			last_time_change_frame = current_global_time;
+			if(walking_frame_index == NUM_OF_FRAME_TYPE_1_WALKING)
+				walking_frame_index = 0;
+			shape.setTexture(&walking_frames_texture[walking_frame_index]);	
+		}	
 	}	
-
 }
 
 bool Zombie::is_get_Shot(sf::Vector2f bullet_position ,std::string bullet_type)
@@ -75,11 +108,14 @@ float Zombie::get_x_Position()
 void Zombie::Stop()
 {
 	velocity = 0;
+	eat_status = true;
 }
 
 void Zombie::go_Forward()
 {
 	velocity = walk_again_velocity;
+	eat_status = false;
+
 }
 
 void Zombie::Bite(float current_global_time)

@@ -19,7 +19,7 @@ public:
 	float height;
 	Square(float x , float y , std::string l_i , std::string i);
 	std::string get_id();
-	bool grow_plant(Plant *p);
+	bool is_Free(Plant *p);
 	void Clean();
 
 };

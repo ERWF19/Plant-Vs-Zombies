@@ -10,7 +10,7 @@ Square::Square(float x , float y , std::string l_i , std::string i)
 
 }
 
-bool Square:: grow_plant(Plant *p)
+bool Square:: is_Free(Plant *p)
 {
 	if(free == true)
 	{

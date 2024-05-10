@@ -8,7 +8,7 @@ void Play(sf::RenderWindow &window)
 	sf:: Clock zombieـperiodicity;
 
 	sf::Music soundtrack;
-	if(!soundtrack.openFromFile("soundeffect/grasswalk.ogg"))
+	if(!soundtrack.openFromFile(MAIN_SOUNDTRACK_PATH))
 	{
 		std:: cout << "Error in loading soundtrack music" << std::endl;
 	}
@@ -17,7 +17,7 @@ void Play(sf::RenderWindow &window)
 	sf::SoundBuffer buffer;
 	sf::Sound zombie_intro_sound;
 
-	if(!buffer.loadFromFile("soundeffect/awooga.ogg"))
+	if(!buffer.loadFromFile(ZOMBIE_INTRO_SOUND_PATH))
 	{
 		std:: cout << "Error in loading zombie_intro_sound" << std::endl;
 	}
@@ -72,7 +72,7 @@ void Play(sf::RenderWindow &window)
 		gameplay.Move_Bullets();
 		gameplay.Bullet_Impact();
 		gameplay.Plants_Death();
-		gameplay.Zombie_Death();
+		gameplay.Zombies_Death();
 		gameplay.Kill_Plants(global_time.getElapsedTime().asSeconds());
 		window.clear();
 		gameplay.draw(window,global_time.getElapsedTime().asSeconds());
