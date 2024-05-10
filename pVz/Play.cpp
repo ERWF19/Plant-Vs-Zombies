@@ -52,6 +52,21 @@ void Play(sf::RenderWindow &window)
 			zombieـperiodicity.restart();
 		}
 
+		if(gameplay.GameOver(HOUSE_X_POSITION))
+		{
+			sf::Sound dead_sound;
+			if(!buffer.loadFromFile(DEAD_SOUND_PATH))
+			{
+				std:: cout << "Error in loading dead_sound" << std::endl;
+			}
+			dead_sound.setBuffer(buffer);
+
+			dead_sound.play();
+			soundtrack.stop();	
+			gameover(window);
+			break;
+		}
+
 		gameplay.Move_Zombies();
 		gameplay.Plants_Fire(global_time.getElapsedTime().asSeconds());
 		gameplay.Move_Bullets();

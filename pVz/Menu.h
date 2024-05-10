@@ -8,7 +8,7 @@ const float CHAR_SIZE = 50;
 const std::string MENU_TEXT_1 = "Play";
 const std::string MENU_TEXT_2 = "Option";
 const std::string MENU_TEXT_3 = "Exit";
-const std::string FONT_PATH = "font/zombie_font2.ttf";
+const std::string FONT_PATH = "font/zombie_font.ttf";
 
 const int MAX_NUMBER_OF_TEXT = 3;
 

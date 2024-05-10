@@ -4,9 +4,9 @@
 #include <sstream>
 
 
-const std::string ZOMBIE_TYPE_1_IMAGE = "pic/Zombie.png";
+const std::string ZOMBIE_TYPE_1_FRAMES_ROOT = "pic/walking_frames/"; 
 
-const int NUM_OF_FRAME_TYPE_1 = 42;
+const int NUM_OF_FRAME_TYPE_1 = 38;
 const float ZOMBIE_TYPE_1_WIDTH = 150;
 const float  ZOMBIE_TYPE_1_HEIGHT= 225;
 const float ZOMBIE_VELOCITY = -0.5;
@@ -26,7 +26,7 @@ private:
 	float height;
 	float last_reaction_time;
 	float eating_speed;
-	std::vector<sf::Texture> texture_frames;
+	std::vector<sf::Texture> frames_texture;
 	int frame_index;
 	float frame_rate;
 	float last_time_change_frame;
@@ -43,5 +43,6 @@ public:
 	void Bite(float current_global_time);
 	bool is_Bite_Time(float current_global_time);
 	bool Are_You_Okay();
+	bool is_House_Reached(float house_x_position);
 
 };

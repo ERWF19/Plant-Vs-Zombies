@@ -279,3 +279,13 @@ void GamePlay::Zombie_Death()
 		}
 	}	
 }
+
+bool GamePlay::GameOver(float house_x_position)
+{
+	for(int i=0 ; i<zombies.size() ; i++)
+	{
+		if(zombies[i]->is_House_Reached(house_x_position))
+			return true;
+	}
+	return false;
+}

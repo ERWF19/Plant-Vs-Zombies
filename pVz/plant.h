@@ -34,7 +34,7 @@ class Plant
 {
 private:
 	sf::RectangleShape shape;
-	sf::Texture texture;
+	std::vector<sf::Texture> frames_texture;
 	std::string name;
 	float width;
 	float height;

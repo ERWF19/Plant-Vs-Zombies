@@ -45,6 +45,7 @@ public:
 	void Kill_Plants(float current_global_time);
 	void Plants_Death();
 	void Zombie_Death();
+	bool GameOver(float house_x_position);
 
 private:
 

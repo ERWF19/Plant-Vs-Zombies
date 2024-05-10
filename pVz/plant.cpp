@@ -10,12 +10,14 @@ Plant::Plant(int selected_card_index)
 		height = SUNFLOWER_HEIGHT;
 		damage = SUNFLOWER_DAMAGE;
 		shooter = false;
+
+		sf::Texture texture;
 		if(!texture.loadFromFile(PLANT_TYPE_1_TEXTURE_PATH))
 		{
 			std:: cout << "error in loading Sunflower texture !" << std::endl;
 		}
-
-		shape.setTexture(&texture);
+		frames_texture.push_back(texture);
+		shape.setTexture(&frames_texture[0]);
 	}
 	else if(selected_card_index == 1)
 	{
@@ -26,12 +28,14 @@ Plant::Plant(int selected_card_index)
 		action_speed = 2;
 		damage = PEASHOOTER_DAMAGE;
 		shooter = true;
+
+		sf::Texture texture;
 		if(!texture.loadFromFile(PLANT_TYPE_2_TEXTURE_PATH))
 		{
-			std:: cout << "error in loading Peashooter texture !" << std::endl;
+			std:: cout << "error in loading Sunflower texture !" << std::endl;
 		}
-
-		shape.setTexture(&texture);
+		frames_texture.push_back(texture);
+		shape.setTexture(&frames_texture[0]);
 	}
 	else if(selected_card_index == 2)
 	{
@@ -42,12 +46,15 @@ Plant::Plant(int selected_card_index)
 		action_speed = 2;
 		damage = SNOW_PEASHOOTER_DAMAGE;
 		shooter = true;
+
+		sf::Texture texture;
 		if(!texture.loadFromFile(PLANT_TYPE_3_TEXTURE_PATH))
 		{
-			std:: cout << "error in loading Snow Peashooter texture !" << std::endl;
+			std:: cout << "error in loading Sunflower texture !" << std::endl;
 		}
+		frames_texture.push_back(texture);
+		shape.setTexture(&frames_texture[0]);
 
-		shape.setTexture(&texture);
 	}
 	else if(selected_card_index == 3)
 	{
@@ -57,37 +64,42 @@ Plant::Plant(int selected_card_index)
 		height = WALLNUT_HEIGHT;
 		damage = WALLNUT_DAMAGE;
 		shooter = false;
+
+		sf::Texture texture;
 		if(!texture.loadFromFile(PLANT_TYPE_4_TEXTURE_PATH))
 		{
 			std:: cout << "error in loading Walllnut texture !" << std::endl;
 		}
+		frames_texture.push_back(texture);
 
-		shape.setTexture(&texture);
+		if(!texture.loadFromFile(PLANT_TYPE_4_CRACKED1_TEXTURE_PATH))
+		{
+			std:: cout << "error in loading Walllnut texture !" << std::endl;
+		}
+		frames_texture.push_back(texture);
+
+		if(!texture.loadFromFile(PLANT_TYPE_4_CRACKED2_TEXTURE_PATH))
+		{
+			std:: cout << "error in loading Walllnut texture !" << std::endl;
+		}
+		frames_texture.push_back(texture);
+		shape.setTexture(&frames_texture[0]);
 	}
 }
 
 void Plant::draw(sf::RenderWindow &window)
 {
-	std::cout << damage<< std::endl;
 
 	if(name == PLANT_TYPE_4)
 	{
 		if(damage == 20)
 		{
-			if(!texture.loadFromFile(PLANT_TYPE_4_CRACKED1_TEXTURE_PATH))
-			{
-				std::cout << "error in loading Walllnut texture !" << std::endl;
-			}
-			shape.setTexture(&texture);
+			shape.setTexture(&frames_texture[1]);
 
 		}
 		else if(damage == 10)
 		{
-			if(!texture.loadFromFile(PLANT_TYPE_4_CRACKED2_TEXTURE_PATH))
-			{
-				std::cout << "error in loading Walllnut texture !" << std::endl;
-			}
-			shape.setTexture(&texture);
+			shape.setTexture(&frames_texture[2]);
 		}
 	}
 	window.draw(shape);
@@ -132,7 +144,6 @@ bool Plant::is_Shooter()
 void Plant::geting_Damage()
 {
 	damage --;
-	//std::cout <<"______________" << damage << std::endl;
 }
 
 float Plant::get_Width()

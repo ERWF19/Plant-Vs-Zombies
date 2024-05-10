@@ -18,16 +18,16 @@ Zombie::Zombie(std::string i , std::string l_i ,float x0 ,float  y0)
 	{
 		sf::Texture t;
 		std::ostringstream path;
-		path << "pic/walking_frames/" << i + 1 << ".png";
+		path << ZOMBIE_TYPE_1_FRAMES_ROOT << i + 1 << ".png";
 		if(!t.loadFromFile(path.str()))
 		{
 			std:: cout << "error in loading zombie frames texture !" << std::endl;
 		}
-		texture_frames.push_back(t);
+		frames_texture.push_back(t);
 	}
 
 	shape.setSize(sf::Vector2f(width,height));
-	shape.setTexture(&texture_frames[frame_index]);
+	shape.setTexture(&frames_texture[frame_index]);
 	shape.setPosition(sf::Vector2f(x0,y0 - ZOMBIE_TYPE_1_HEIGHT/2));
 
 }
@@ -41,19 +41,13 @@ void Zombie::draw(sf::RenderWindow &window , float current_global_time)
 {
 	window.draw(shape);
 	if(current_global_time - last_time_change_frame >= frame_rate)
-	if(frame_index < NUM_OF_FRAME_TYPE_1)
 	{
 		frame_index ++;
 		last_time_change_frame = current_global_time;
-	}
-	else
-	{
-		frame_index = 0;
-		last_time_change_frame = current_global_time;
-
-	}
-
-	shape.setTexture(&texture_frames[frame_index]);
+		if(frame_index == NUM_OF_FRAME_TYPE_1)
+			frame_index = 0;
+		shape.setTexture(&frames_texture[frame_index]);	
+	}	
 
 }
 
@@ -63,12 +57,10 @@ bool Zombie::is_get_Shot(sf::Vector2f bullet_position ,std::string bullet_type)
 	{
 		if(bullet_type == "Ice Bullet")
 		{
-			std::cout << "eeee" << std::endl;
 			velocity = ZOMBIE_VELOCITY/2;
 			walk_again_velocity = velocity;
 		}
 		damage --;
-		std::cout << "get_shot !" << "  damage = " << damage << std::endl;
 		return true;
 	}
 	return false;
@@ -110,8 +102,9 @@ bool Zombie::Are_You_Okay()
 		return true;
 }
 
-/*void Zombie::get_heat()
+bool Zombie::is_House_Reached(float house_x_position)
 {
-	if(damage == 5)
-
-}*/
+	if(shape.getPosition().x <house_x_position)
+		return true;
+	return false;
+}
