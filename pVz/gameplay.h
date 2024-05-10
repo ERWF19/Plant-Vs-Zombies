@@ -35,7 +35,7 @@ public:
 	void Load_Cards();
 	void draw(sf::RenderWindow &window,float current_global_time);
 	void Move_Mouse(sf::RenderWindow &window);
-	void Draw_Cards(sf::RenderWindow &window);
+	void Draw_Cards(sf::RenderWindow &window,float current_global_time);
 	void Draw_Plants(sf::RenderWindow &window);
 	void Card_Selection(sf::RenderWindow &window,float current_global_time);
 	bool is_Line_Range(sf::Vector2i localPosition ,Plant *p);

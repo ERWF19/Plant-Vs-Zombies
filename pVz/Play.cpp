@@ -60,7 +60,7 @@ void Play(sf::RenderWindow &window)
 				std:: cout << "Error in loading dead_sound" << std::endl;
 			}
 			dead_sound.setBuffer(buffer);
-
+	
 			dead_sound.play();
 			soundtrack.stop();	
 			gameover(window);

@@ -1,8 +1,10 @@
 #include "card.h"
 
-Card::Card(std::string n,int pr,float x_position , float y_position, std::string on_card_path ,  std::string off_card_path)
+Card::Card(std::string n,int pr,float x_position , float y_position, std::string on_card_path ,  std::string off_card_path , float invalid_t)
 {
 	name = n;
+	invalid_time = invalid_t;
+	validation = true;
 
 	shape.setSize(sf::Vector2f(CARD_WIDTH,CARD_HEIGHT));
 	shape.setPosition(x_position,y_position);
@@ -32,8 +34,18 @@ Card::Card(std::string n,int pr,float x_position , float y_position, std::string
 
 }
 
-void Card::draw(sf::RenderWindow &window)
+void Card::draw(sf::RenderWindow &window ,float current_global_time )
 {
+	if(current_global_time - last_time_selected >= invalid_time)
+	{
+		validation =true;
+	}
+
+	if(validation)
+		shape.setTexture(&on_texture);
+	else
+		shape.setTexture(&off_texture);
+
 	window.draw(shape);
 	window.draw(price);
 }
@@ -41,4 +53,15 @@ void Card::draw(sf::RenderWindow &window)
 sf::Vector2f  Card::getPosition()
 {
 	return shape.getPosition();
+}
+
+bool Card::is_Valid()
+{
+	return validation;
+}
+
+void Card::Apply_Current_Time(float current_global_time)
+{
+	last_time_selected = current_global_time;
+	validation = false;
 }

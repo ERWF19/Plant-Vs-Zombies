@@ -1,2 +1,0 @@
-add eating animation of zombies and upgrade cards (add card class)
-

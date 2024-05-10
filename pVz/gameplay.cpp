@@ -31,16 +31,16 @@ GamePlay::GamePlay(float width , float height)
 void GamePlay::Load_Cards()
 {
 
-	Card* plant_type_1_card = new Card(PLANT_TYPE_1 ,50,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y,PLANT_TYPE_1_ON_CARD_PATH,PLANT_TYPE_1_OFF_CARD_PATH);
+	Card* plant_type_1_card = new Card(PLANT_TYPE_1 ,50,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y,PLANT_TYPE_1_ON_CARD_PATH,PLANT_TYPE_1_OFF_CARD_PATH,8);
 	cards.push_back(plant_type_1_card);
 
-	Card* plant_type_2_card = new Card(PLANT_TYPE_2 ,100,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + CARD_HEIGHT + 10,PLANT_TYPE_2_ON_CARD_PATH,PLANT_TYPE_2_OFF_CARD_PATH);
+	Card* plant_type_2_card = new Card(PLANT_TYPE_2 ,100,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + CARD_HEIGHT + 10,PLANT_TYPE_2_ON_CARD_PATH,PLANT_TYPE_2_OFF_CARD_PATH,8);
 	cards.push_back(plant_type_2_card);
 
-	Card* plant_type_3_card = new Card(PLANT_TYPE_3 ,175,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + 2 * (CARD_HEIGHT +10),PLANT_TYPE_3_ON_CARD_PATH,PLANT_TYPE_3_OFF_CARD_PATH);
+	Card* plant_type_3_card = new Card(PLANT_TYPE_3 ,175,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + 2 * (CARD_HEIGHT +10),PLANT_TYPE_3_ON_CARD_PATH,PLANT_TYPE_3_OFF_CARD_PATH,8);
 	cards.push_back(plant_type_3_card);
 
-	Card* plant_type_4_card = new Card(PLANT_TYPE_4 ,50,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + 3 * (CARD_HEIGHT +10),PLANT_TYPE_4_ON_CARD_PATH,PLANT_TYPE_4_OFF_CARD_PATH);
+	Card* plant_type_4_card = new Card(PLANT_TYPE_4 ,50,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + 3 * (CARD_HEIGHT +10),PLANT_TYPE_4_ON_CARD_PATH,PLANT_TYPE_4_OFF_CARD_PATH,30);
 	cards.push_back(plant_type_4_card);	
 	
 }
@@ -48,7 +48,7 @@ void GamePlay::Load_Cards()
 void GamePlay::draw(sf::RenderWindow &window ,float current_global_time)
 {
 	window.draw(playground);
-	Draw_Cards(window);
+	Draw_Cards(window , current_global_time);
 	Draw_Plants(window);
 	Draw_Zombies(window,current_global_time);
 	Draw_Bullets(window);
@@ -79,36 +79,41 @@ void GamePlay::Card_Selection(sf::RenderWindow &window , float current_global_ti
 {
 	if(selected_card_index == 0 || selected_card_index == 1 || selected_card_index == 2 || selected_card_index == 3)
 	{
-		sf::Vector2i localPosition;
-		Plant *new_plant = new Plant(selected_card_index);
-
-		plants.push_back(new_plant);
-		bool selected_statement = true;
-		while(window.isOpen())
+		Card * selected_card = cards[selected_card_index];
+		if(selected_card->is_Valid())
 		{
-			sf::Event event;
-			while(window.pollEvent(event))
-			{
-				localPosition = sf::Mouse::getPosition(window);
-				if(is_Line_Range(localPosition , new_plant))
-				{
-					if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
-					{
-						Line* plant_line = Find_Line(new_plant->line_id);
-						plant_line->Add_Plant(new_plant);
-						selected_statement =  !is_Valid_Square(new_plant);
-						break;
-					}
-				}
+			sf::Vector2i localPosition;
+			Plant *new_plant = new Plant(selected_card_index);
 
-				if(event.type == sf::Event::Closed)
-					window.close();
+			plants.push_back(new_plant);
+			bool selected_statement = true;
+			while(window.isOpen())
+			{
+				sf::Event event;
+				while(window.pollEvent(event))
+				{
+					localPosition = sf::Mouse::getPosition(window);
+					if(is_Line_Range(localPosition , new_plant))
+					{
+						if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+						{
+							selected_card->Apply_Current_Time(current_global_time);
+							Line* plant_line = Find_Line(new_plant->line_id);
+							plant_line->Add_Plant(new_plant);
+							selected_statement =  !is_Valid_Square(new_plant);
+							break;
+						}
+					}
+
+					if(event.type == sf::Event::Closed)
+						window.close();
+				}
+				if(!selected_statement)
+					break;
+				window.clear();
+				draw(window,current_global_time);
+				window.display();
 			}
-			if(!selected_statement)
-				break;
-			window.clear();
-			draw(window,current_global_time);
-			window.display();
 		}
 	}
 }
@@ -123,11 +128,11 @@ bool GamePlay::is_Line_Range(sf::Vector2i localPosition ,Plant *p)
 	
 }
 
-void GamePlay::Draw_Cards(sf::RenderWindow &window)
+void GamePlay::Draw_Cards(sf::RenderWindow &window ,float current_global_time)
 {
 	for(int i=0 ; i<cards.size() ; i++)
 	{
-		cards[i]->draw(window);
+		cards[i]->draw(window,current_global_time);
 	}
 }
 
