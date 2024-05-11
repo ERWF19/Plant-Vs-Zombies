@@ -9,6 +9,8 @@ const float HOUSE_X_POSITION = 270;
 const float DEAD_TEXT_CHAR_SIZE = 150;
 const float DEAD_TEXT_X_POSITION = 225;
 const float DEAD_TEXT_Y_POSITION = 60;
+const float FALLING_SUN_PRIMARY_X_POSITION = 313;
+const float FALLING_SUN_PRIMARY_Y_POSITION = 0;
 
 
 const std::string MAIN_SOUNDTRACK_PATH =  "soundeffect/grasswalk.ogg";

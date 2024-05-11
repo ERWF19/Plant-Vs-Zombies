@@ -4,7 +4,9 @@ Card::Card(std::string n,int pr,float x_position , float y_position, std::string
 {
 	name = n;
 	invalid_time = invalid_t;
-	validation = true;
+	validation = false;
+	price = pr;
+	last_time_selected = 0;
 
 	shape.setSize(sf::Vector2f(CARD_WIDTH,CARD_HEIGHT));
 	shape.setPosition(x_position,y_position);
@@ -26,20 +28,20 @@ Card::Card(std::string n,int pr,float x_position , float y_position, std::string
 		std::cout << "error in loading digit font!" << std::endl;
 	}
 
-	price.setFont(font);
-	price.setString(std::to_string(pr));
-	price.setCharacterSize(PRICE_CHAR_SIZE);
-	price.setFillColor(sf::Color::Black);
-	price.setPosition(sf::Vector2f(x_position + (0.65 * CARD_WIDTH) ,y_position + (0.65 * CARD_HEIGHT) + 2.5));
+	price_text.setFont(font);
+	price_text.setString(std::to_string(price));
+	price_text.setCharacterSize(PRICE_CHAR_SIZE);
+	price_text.setFillColor(sf::Color::Black);
+	price_text.setPosition(sf::Vector2f(x_position + (0.65 * CARD_WIDTH) ,y_position + (0.65 * CARD_HEIGHT) + 2.5));
 
 }
 
-void Card::draw(sf::RenderWindow &window ,float current_global_time )
+void Card::draw(sf::RenderWindow &window ,float current_global_time,int sun_score)
 {
-	if(current_global_time - last_time_selected >= invalid_time)
-	{
+	if((current_global_time - last_time_selected >= invalid_time) && sun_score >= price)
 		validation =true;
-	}
+	else
+		validation = false;
 
 	if(validation)
 		shape.setTexture(&on_texture);
@@ -47,10 +49,10 @@ void Card::draw(sf::RenderWindow &window ,float current_global_time )
 		shape.setTexture(&off_texture);
 
 	window.draw(shape);
-	window.draw(price);
+	window.draw(price_text);
 }
 
-sf::Vector2f  Card::getPosition()
+sf::Vector2f Card::getPosition()
 {
 	return shape.getPosition();
 }
@@ -60,8 +62,11 @@ bool Card::is_Valid()
 	return validation;
 }
 
-void Card::Apply_Current_Time(float current_global_time)
+void Card::Payment(int &score,float current_global_time)
 {
+	score-=price;
+	if(score < 0)
+		score+= price;
 	last_time_selected = current_global_time;
 	validation = false;
 }

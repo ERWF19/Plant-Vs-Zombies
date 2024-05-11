@@ -3,7 +3,20 @@
 
 GamePlay::GamePlay(float width , float height)
 {
-	sun_score = 0;
+	Load_Background(width,height);
+	Load_Sun_Score();
+	Load_Cards();
+
+	if(!buffer.loadFromFile(THROW_SOUND))
+	{
+		std:: cout << "Error in loading throw sound !" << std::endl;
+	}
+	throw_sound.setBuffer(buffer);
+	
+}
+
+void GamePlay::Load_Background(float width , float height)
+{
 	playground.setSize(sf::Vector2f(width,height));
 
 	if(!playground_texture.loadFromFile(PLAYGROUND_TEXTURE_PATH))
@@ -17,15 +30,38 @@ GamePlay::GamePlay(float width , float height)
 		Line *l = new Line(FIRST_LINE_X_POSITION,FIRST_LINE_Y_POSITION + (SQUARE_LENGTH * i),std::to_string(i));
 		lines.push_back(l);
 	}
+}
+void GamePlay::Load_Sun_Score()
+{
+	sun_score = 0;
 
-	Load_Cards();
+	score_background.setSize(sf::Vector2f(SCORE_BACKGROUND_WIDTH,SCORE_BACKGROUND_HIGHT));
+	score_background.setPosition(sf::Vector2f(POSITION_X_SCORE_BACKGROUND,POSITION_Y_SCORE_BACKGROUND));
+	score_background.setFillColor(sf::Color(139, 69, 19));
 
-	if(!buffer.loadFromFile(THROW_SOUND))
+	score_foreground.setSize(sf::Vector2f(SCORE_FOREGROUND_WIDTH,SCORE_FOREGROUND_HIGHT));
+	score_foreground.setPosition(sf::Vector2f(POSITION_X_SCORE_BACKGROUND + (0.33 *SCORE_BACKGROUND_WIDTH) ,POSITION_Y_SCORE_BACKGROUND + 2.75));
+	score_foreground.setFillColor(sf::Color(255, 222, 173));
+
+	sun_score_shape.setSize(sf::Vector2f(SCORE_SUN_SAHPE_WIDTH,SCORE_SUN_SAHPE_HIGHT));
+	sun_score_shape.setPosition(sf::Vector2f(POSITION_X_SCORE_BACKGROUND,POSITION_Y_SCORE_BACKGROUND));
+	if(!sun_score_texture.loadFromFile(SUN_TEXTURE_PATH))
 	{
-		std:: cout << "Error in loading throw sound !" << std::endl;
+		std::cout << "error in loading card texture !" << std::endl;
 	}
-	throw_sound.setBuffer(buffer);
-	
+	sun_score_shape.setTexture(&sun_score_texture);
+
+    if(!score_font.loadFromFile(DIGIT_FONT_PATH))
+	{
+		std::cout << "error in reading font !" << std::endl;
+	}
+
+	score_text.setFont(score_font);
+	score_text.setString(std::to_string(sun_score));
+	score_text.setFillColor(sf::Color::Black);
+	score_text.setCharacterSize(TEXT_SCORE_CHAR_SIZE);
+	score_text.setPosition(sf::Vector2f(POSITION_X_SCORE_BACKGROUND + (0.6 *SCORE_BACKGROUND_WIDTH) ,POSITION_Y_SCORE_BACKGROUND + 20));
+
 }
 
 void GamePlay::Load_Cards()
@@ -47,11 +83,14 @@ void GamePlay::Load_Cards()
 
 void GamePlay::draw(sf::RenderWindow &window ,float current_global_time)
 {
+	std::cout << sun_score << std::endl;
 	window.draw(playground);
+	Draw_Sun_Score(window);
 	Draw_Cards(window , current_global_time);
 	Draw_Plants(window);
 	Draw_Zombies(window,current_global_time);
 	Draw_Bullets(window);
+	Draw_Falling_Suns(window);
 }
 
 void GamePlay::Move_Mouse(sf::RenderWindow &window)
@@ -71,6 +110,25 @@ void GamePlay::Move_Mouse(sf::RenderWindow &window)
 		else
 		{
 			selected_card_index = -1;
+		}
+	}
+
+	sf::Vector2f sun_position;
+
+	for(int i=0 ; i<suns.size(); i++ )
+	{
+		sun_position = suns[i]->get_Position();
+
+		if(localPosition.x >= sun_position.x && localPosition.x <= sun_position.x + SUN_WIDTH  
+		&& localPosition.y >= sun_position.y && localPosition.y <= sun_position.y + SUN_WIDTH)
+		{
+			if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				sun_score+=SCORE_COUNTING_UNIT;
+				score_text.setString(std::to_string(sun_score));
+				delete suns[i];
+				suns.erase(suns.begin() + i);
+			}
 		}
 	}
 }
@@ -97,10 +155,11 @@ void GamePlay::Card_Selection(sf::RenderWindow &window , float current_global_ti
 					{
 						if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
 						{
-							selected_card->Apply_Current_Time(current_global_time);
 							Line* plant_line = Find_Line(new_plant->line_id);
 							plant_line->Add_Plant(new_plant);
 							selected_statement =  !is_Valid_Square(new_plant);
+							selected_card->Payment(sun_score,current_global_time);
+							score_text.setString(std::to_string(sun_score));
 							break;
 						}
 					}
@@ -128,11 +187,18 @@ bool GamePlay::is_Line_Range(sf::Vector2i localPosition ,Plant *p)
 	
 }
 
+void GamePlay::Draw_Sun_Score(sf::RenderWindow &window )
+{
+	window.draw(score_background);
+	window.draw(sun_score_shape);
+	window.draw(score_foreground);
+	window.draw(score_text);
+}
 void GamePlay::Draw_Cards(sf::RenderWindow &window ,float current_global_time)
 {
 	for(int i=0 ; i<cards.size() ; i++)
 	{
-		cards[i]->draw(window,current_global_time);
+		cards[i]->draw(window,current_global_time,sun_score);
 	}
 }
 
@@ -159,6 +225,13 @@ void GamePlay::Draw_Bullets(sf::RenderWindow &window)
 	}
 }
 
+void GamePlay::Draw_Falling_Suns(sf::RenderWindow &window)
+{
+	for(int i=0 ; i<suns.size() ; i++)
+	{
+		suns[i]->draw(window);
+	}
+}
 
 
 bool GamePlay::is_Valid_Square(Plant *p)
@@ -179,11 +252,38 @@ void GamePlay::Generate_Zombie()
 	zombies.push_back(z);
 }
 
+void GamePlay::Generate_Falling_Sun(float sun_x_position , float sun_y_position)
+{
+	Sun* new_sun = new Sun(FALLING_SUN_VELOCITY,sun_x_position,sun_y_position);
+	suns.push_back(new_sun);
+}
+
+void GamePlay::Generate_Produced_Sun(float current_global_time)
+{
+	for(int i=0 ; i<plants.size() ; i++)
+	{
+		if(plants[i]->is_Act_Time(current_global_time) && plants[i]->is_Producer())
+		{	
+			Sun* new_sun = plants[i]->Produce_Sun(current_global_time);	
+			suns.push_back(new_sun);
+		}
+	}
+}
+
+
 void GamePlay::Move_Zombies()
 {
 	for(int i=0 ; i<zombies.size() ; i++)
 	{
 		zombies[i]->Move();
+	}
+}
+
+void GamePlay::Move_Falling_Suns()
+{
+	for(int i=0 ; i<suns.size() ; i++)
+	{
+		suns[i]->Move();
 	}
 }
 
@@ -193,7 +293,7 @@ void GamePlay::Plants_Fire(float current_global_time)
 	{
 		Line *plant_line = Find_Line(plants[i]->line_id);
 
-		if(plants[i]->is_Shoot_Time(current_global_time) && plants[i]->is_Shooter())
+		if(plants[i]->is_Act_Time(current_global_time) && plants[i]->is_Shooter())
 		{
 			if(plant_line->is_Deadline(plants[i]))
 			{
@@ -231,6 +331,7 @@ void GamePlay::Bullet_Impact()
 		bullet_line = Find_Line(bullets[i]->line_id);
 		if(bullet_line->is_Collided(bullets[i]))
 		{
+			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
 		}
 	}
@@ -271,6 +372,7 @@ void GamePlay::Zombies_Death()
 		{
 			Line* zombie_line = Find_Line(zombies[i]->line_id);
 			zombie_line->Delete_Zombie(zombies[i]);
+			delete zombies[i];
 			zombies.erase(zombies.begin() + i);
 		}
 	}	

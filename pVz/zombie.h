@@ -8,11 +8,11 @@ const std::string ZOMBIE_TYPE_1_WALKING_FRAMES_ROOT = "pic/walking_frames/";
 const std::string ZOMBIE_TYPE_1_EATING_FRAMES_ROOT = "pic/eating_frames/"; 
 
 
-const int NUM_OF_FRAME_TYPE_1_WALKING = 38;
+const int NUM_OF_FRAME_TYPE_1_WALKING = 74;
 const int NUM_OF_FRAME_TYPE_1_EATING = 14;
 const float ZOMBIE_TYPE_1_WIDTH = 150;
 const float  ZOMBIE_TYPE_1_HEIGHT= 300;
-const float ZOMBIE_VELOCITY = -0.5;
+const float ZOMBIE_VELOCITY = -0.1;
 const float ZOMBIE_TYPE_1_DAMAGE = 10;
 const float FRAME_RATE = 0.1;
 

@@ -2,14 +2,17 @@
 
 Plant::Plant(int selected_card_index)
 {
+	last_reaction_time = 0;
+
 	if(selected_card_index == 0)
 	{
 		name = PLANT_TYPE_1;
-		price = 50;
 		width = SUNFLOWER_WIDTH;
 		height = SUNFLOWER_HEIGHT;
+		action_speed = 5;
 		damage = SUNFLOWER_DAMAGE;
 		shooter = false;
+		producer = true;
 
 		sf::Texture texture;
 		if(!texture.loadFromFile(PLANT_TYPE_1_TEXTURE_PATH))
@@ -22,12 +25,12 @@ Plant::Plant(int selected_card_index)
 	else if(selected_card_index == 1)
 	{
 		name = PLANT_TYPE_2;
-		price = 100;
 		width = PEASHOOTER_WIDTH;
 		height = PEASHOOTER_HEIGHT;
 		action_speed = 2;
 		damage = PEASHOOTER_DAMAGE;
 		shooter = true;
+		producer = false;
 
 		sf::Texture texture;
 		if(!texture.loadFromFile(PLANT_TYPE_2_TEXTURE_PATH))
@@ -40,12 +43,12 @@ Plant::Plant(int selected_card_index)
 	else if(selected_card_index == 2)
 	{
 		name = PLANT_TYPE_3;
-		price = 175;
 		width = SNOW_PEASHOOTER_WIDTH;
 		height = SNOW_PEASHOOTER_HEIGHT;
 		action_speed = 2;
 		damage = SNOW_PEASHOOTER_DAMAGE;
 		shooter = true;
+		producer = false;
 
 		sf::Texture texture;
 		if(!texture.loadFromFile(PLANT_TYPE_3_TEXTURE_PATH))
@@ -59,11 +62,11 @@ Plant::Plant(int selected_card_index)
 	else if(selected_card_index == 3)
 	{
 		name = PLANT_TYPE_4;
-		price = 50;
 		width = WALLNUT_WIDTH;
 		height = WALLNUT_HEIGHT;
 		damage = WALLNUT_DAMAGE;
 		shooter = false;
+		producer = false;
 
 		sf::Texture texture;
 		if(!texture.loadFromFile(PLANT_TYPE_4_TEXTURE_PATH))
@@ -121,7 +124,15 @@ Bullet* Plant::Shoot_Bullet(float current_global_time)
 	return new_bullet;
 }
 
-bool Plant::is_Shoot_Time(float current_global_time)
+Sun* Plant::Produce_Sun(float current_global_time)
+{
+	sf::Vector2f shape_position = shape.getPosition();
+	Sun* new_sun = new Sun(0,shape_position.x,shape_position.y);
+	last_reaction_time = current_global_time;
+	return new_sun;
+}
+
+bool Plant::is_Act_Time(float current_global_time)
 {
 	if(current_global_time - last_reaction_time >= action_speed)
 		return true;
@@ -133,6 +144,14 @@ float Plant::get_x_Position()
 {
 	return shape.getPosition().x;
 }
+
+bool Plant::is_Producer()
+{
+	if(producer)
+		return true;
+	return false;
+}
+
 
 bool Plant::is_Shooter()
 {

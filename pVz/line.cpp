@@ -115,6 +115,7 @@ void Line::Clean_Square(Plant* plant)
 			plants.erase(plants.begin() + j);
 		}
 	}
+	delete plant;
 }
 
 void Line::Add_Plant(Plant* plant)

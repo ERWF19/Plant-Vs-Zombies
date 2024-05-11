@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "bullet.h"
+#include "sun.h"
+
 
 const std::string PLANT_TYPE_1 = "Sunflower";
 const std::string PLANT_TYPE_2 = "Peashooter";
@@ -42,9 +44,11 @@ public:
 	void draw(sf::RenderWindow &window);
 	void set_Square(std::string l , std::string s,float square_width ,float square_height);
 	Bullet* Shoot_Bullet(float current_global_time);
-	bool is_Shoot_Time(float current_global_time);
+	Sun* Produce_Sun(float current_global_time);
+	bool is_Act_Time(float current_global_time);
 	float get_x_Position();
 	void geting_Damage();
+	bool is_Producer();
 	bool is_Shooter();
 	float get_Width();
 	bool is_Dead();
@@ -56,8 +60,8 @@ private:
 	float width;
 	float height;
 	float damage;
-	float price;
 	float last_reaction_time;
 	float action_speed;
 	bool shooter;
+	bool producer;
 };
