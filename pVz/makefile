@@ -1,17 +1,20 @@
-pvz: main.o Menu.o Play.o gameover.o gameplay.o line.o  square.o plant.o zombie.o bullet.o card.o sun.o
-	g++ -std=c++20 main.o Menu.o Play.o gameover.o gameplay.o line.o square.o bullet.o plant.o zombie.o card.o sun.o -o pvz.out  -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+pvz: main.o menu.o play.o gameover.o read_from_file.o gameplay.o line.o  square.o plant.o zombie.o bullet.o card.o sun.o
+	g++ -std=c++20 main.o menu.o play.o read_from_file.o gameover.o gameplay.o line.o square.o bullet.o plant.o zombie.o card.o sun.o -o pvz.out  -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 main.o: main.cpp
 	g++ -std=c++20 -c main.cpp
 
-Menu.o: Menu.cpp
-	g++ -std=c++20 -c Menu.cpp
+menu.o: menu.cpp
+	g++ -std=c++20 -c menu.cpp
 
-Play.o: Play.cpp
-	g++ -std=c++20 -c Play.cpp
+play.o: play.cpp
+	g++ -std=c++20 -c play.cpp
 
 gameover.o: gameover.cpp
 	g++ -std=c++20 -c gameover.cpp
+
+read_from_file.o: read_from_file.cpp
+	g++ -std=c++20 -c read_from_file.cpp
 
 gameplay.o: gameplay.cpp
 	g++ -std=c++20 -c gameplay.cpp

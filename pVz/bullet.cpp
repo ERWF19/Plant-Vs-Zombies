@@ -1,9 +1,10 @@
 #include "bullet.h"
 
-Bullet::Bullet(std::string plant_name,std::string l_i,float x_plant,float y_plant,float plant_width , float plant_height)
+Bullet::Bullet(std::string plant_name,std::string l_i,float v,float d,float x_plant,float y_plant,float plant_width , float plant_height)
 {
 
-	if(plant_name == "Peashooter")
+
+	if(plant_name == PLANT_TYPE_2)
 	{
 		if(!bullet_texture.loadFromFile(BULLET_TYPE_1_TEXTURE_PATH))
 		{
@@ -14,10 +15,12 @@ Bullet::Bullet(std::string plant_name,std::string l_i,float x_plant,float y_plan
 		shape.setRadius(10);
 		shape.setTexture(&bullet_texture);
 		shape.setPosition(sf::Vector2f(x_plant + plant_width - 15 , y_plant + 0.2 * plant_height - 10));
-		velocity = 10;
+		velocity = v;
+		damage = d;
 		type = BULLET_TYPE_1;
+
 	}
-	if(plant_name == "Snow Peashooter")
+	if(plant_name == PLANT_TYPE_3)
 	{
 		if(!bullet_texture.loadFromFile(BULLET_TYPE_2_TEXTURE_PATH))
 		{
@@ -27,7 +30,8 @@ Bullet::Bullet(std::string plant_name,std::string l_i,float x_plant,float y_plan
 		shape.setRadius(10);
 		shape.setTexture(&bullet_texture);
 		shape.setPosition(sf::Vector2f(x_plant + plant_width - 15 , y_plant + 0.2 * plant_height - 10));	
-		velocity = 10;
+		velocity = v;
+		damage = d;
 		type = BULLET_TYPE_2;
 	}
 }
@@ -50,4 +54,9 @@ sf::Vector2f Bullet::get_Position()
 std::string Bullet::get_Type()
 {
 	return type;
+}
+
+float Bullet::get_damage()
+{
+	return damage;
 }

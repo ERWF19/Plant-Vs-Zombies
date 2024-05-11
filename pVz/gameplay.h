@@ -1,11 +1,17 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <fstream>
 #include <cstdlib>
 #include <time.h>
 #include "line.h"
 #include "card.h"
 
 
+
+const std::string PLANTS_OPTION_PATH = "option/plants_option.csv";
+const std::string ZOMBIES_OPTION_PATH = "option/zombies_option.csv";
+
+const char SEPRATOR = ',';
 
 const std::string PLAYGROUND_TEXTURE_PATH = "pic/playground.png";
 const std::string THROW_SOUND = "soundeffect/throw.ogg";
@@ -15,8 +21,8 @@ const std::string PLANT_TYPE_2_ON_CARD_PATH = "pic/cards/on_peashooter.png";
 const std::string PLANT_TYPE_2_OFF_CARD_PATH = "pic/cards/off_peashooter.png";
 const std::string PLANT_TYPE_3_ON_CARD_PATH = "pic/cards/on_snow_peashooter.png";
 const std::string PLANT_TYPE_3_OFF_CARD_PATH = "pic/cards/off_snow_peashooter.png";
-const std::string PLANT_TYPE_4_ON_CARD_PATH = "pic/cards/on_wallnut.png";
-const std::string PLANT_TYPE_4_OFF_CARD_PATH = "pic/cards/off_wallnut.png";
+const std::string PLANT_TYPE_4_ON_CARD_PATH = "pic/cards/on_walnut.png";
+const std::string PLANT_TYPE_4_OFF_CARD_PATH = "pic/cards/off_walnut.png";
 
 
 
@@ -44,11 +50,12 @@ class GamePlay
 public:
 	GamePlay(float width , float height);
 	void Load_Background(float width , float height);
+	void Read_From_File(std::vector<std::pair<std::string,std::vector<float>>> &options,std::string file_path);
 	void Load_Cards();
 	void draw(sf::RenderWindow &window,float current_global_time);
 	void Move_Mouse(sf::RenderWindow &window);
 	void Draw_Cards(sf::RenderWindow &window,float current_global_time);
-	void Draw_Plants(sf::RenderWindow &window);
+	void Draw_Plants(sf::RenderWindow &window,float current_global_time);
 	void Card_Selection(sf::RenderWindow &window,float current_global_time);
 	bool is_Line_Range(sf::Vector2i localPosition ,Plant *p);
 	bool is_Valid_Square(Plant *p);
@@ -64,7 +71,7 @@ public:
 	void Plants_Death();
 	void Zombies_Death();
 	bool GameOver(float house_x_position);
-	void Generate_Falling_Sun(float sun_x_position ,float sun_y_position);
+	void Generate_Falling_Sun(float sun_x_position,float sun_y_position,float vertical_speed);
 	void Move_Falling_Suns();
 	void Draw_Falling_Suns(sf::RenderWindow &window);
 	void Load_Sun_Score();
@@ -73,6 +80,10 @@ public:
 
 
 private:
+	std::vector<std::pair<std::string,std::vector<float>>> plants_options;
+	std::vector<std::pair<std::string,std::vector<float>>> zombies_options;
+
+	
 	int sun_score;
 	sf::RectangleShape score_background;
 	sf::Font score_font;

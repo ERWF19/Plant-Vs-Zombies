@@ -3,6 +3,8 @@
 
 GamePlay::GamePlay(float width , float height)
 {
+	Read_From_File(plants_options,PLANTS_OPTION_PATH);
+	Read_From_File(zombies_options,ZOMBIES_OPTION_PATH);
 	Load_Background(width,height);
 	Load_Sun_Score();
 	Load_Cards();
@@ -67,27 +69,27 @@ void GamePlay::Load_Sun_Score()
 void GamePlay::Load_Cards()
 {
 
-	Card* plant_type_1_card = new Card(PLANT_TYPE_1 ,50,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y,PLANT_TYPE_1_ON_CARD_PATH,PLANT_TYPE_1_OFF_CARD_PATH,8);
-	cards.push_back(plant_type_1_card);
+	for(int i=0 ; i<plants_options.size() ; i++)
+	{
+		std::ostringstream on_path , off_path;
+		on_path << "pic/cards/on_" << plants_options[i].first << ".png"; 
+		off_path <<	"pic/cards/off_" << plants_options[i].first << ".png"; 
+		std::string on_card_path = on_path.str();
+		std::string off_card_path = off_path.str();
 
-	Card* plant_type_2_card = new Card(PLANT_TYPE_2 ,100,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + CARD_HEIGHT + 10,PLANT_TYPE_2_ON_CARD_PATH,PLANT_TYPE_2_OFF_CARD_PATH,8);
-	cards.push_back(plant_type_2_card);
-
-	Card* plant_type_3_card = new Card(PLANT_TYPE_3 ,175,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + 2 * (CARD_HEIGHT +10),PLANT_TYPE_3_ON_CARD_PATH,PLANT_TYPE_3_OFF_CARD_PATH,8);
-	cards.push_back(plant_type_3_card);
-
-	Card* plant_type_4_card = new Card(PLANT_TYPE_4 ,50,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + 3 * (CARD_HEIGHT +10),PLANT_TYPE_4_ON_CARD_PATH,PLANT_TYPE_4_OFF_CARD_PATH,30);
-	cards.push_back(plant_type_4_card);	
+		Card* new_card = new Card(plants_options[i].first,plants_options[i].second
+			,FIRST_CARD_COORDINATE_X,FIRST_CARD_COORDINATE_Y + (i*(CARD_HEIGHT+10)),on_card_path,off_card_path);
+		cards.push_back(new_card);
+	}
 	
 }
 
 void GamePlay::draw(sf::RenderWindow &window ,float current_global_time)
 {
-	std::cout << sun_score << std::endl;
 	window.draw(playground);
 	Draw_Sun_Score(window);
-	Draw_Cards(window , current_global_time);
-	Draw_Plants(window);
+	Draw_Cards(window,current_global_time);
+	Draw_Plants(window,current_global_time);
 	Draw_Zombies(window,current_global_time);
 	Draw_Bullets(window);
 	Draw_Falling_Suns(window);
@@ -135,13 +137,13 @@ void GamePlay::Move_Mouse(sf::RenderWindow &window)
 
 void GamePlay::Card_Selection(sf::RenderWindow &window , float current_global_time)
 {
-	if(selected_card_index == 0 || selected_card_index == 1 || selected_card_index == 2 || selected_card_index == 3)
+	if(selected_card_index != -1)
 	{
 		Card * selected_card = cards[selected_card_index];
 		if(selected_card->is_Valid())
 		{
 			sf::Vector2i localPosition;
-			Plant *new_plant = new Plant(selected_card_index);
+			Plant *new_plant = new Plant(selected_card->get_name(),plants_options[selected_card_index].second);
 
 			plants.push_back(new_plant);
 			bool selected_statement = true;
@@ -202,11 +204,11 @@ void GamePlay::Draw_Cards(sf::RenderWindow &window ,float current_global_time)
 	}
 }
 
-void GamePlay::Draw_Plants(sf::RenderWindow &window)
+void GamePlay::Draw_Plants(sf::RenderWindow &window , float current_global_time)
 {
 	for(int i=0 ; i<plants.size() ; i++)
 	{
-		plants[i]->draw(window);
+		plants[i]->draw(window,current_global_time);
 	}
 }
 void GamePlay::Draw_Zombies(sf::RenderWindow &window , float current_global_time)
@@ -248,13 +250,15 @@ bool GamePlay::is_Valid_Square(Plant *p)
 void GamePlay::Generate_Zombie()
 {
 	std::srand(time(0));
-	Zombie* z = lines[0 +(std::rand() % 5)]->Generate_Zombie();
+	int zombie_type_index = 0 + (std::rand() % zombies_options.size());
+	std::srand(time(0));
+	Zombie* z = lines[0 +(std::rand() % 5)]->Generate_Zombie(zombies_options[zombie_type_index]);
 	zombies.push_back(z);
 }
 
-void GamePlay::Generate_Falling_Sun(float sun_x_position , float sun_y_position)
+void GamePlay::Generate_Falling_Sun(float sun_x_position ,float sun_y_position,float vertical_speed)
 {
-	Sun* new_sun = new Sun(FALLING_SUN_VELOCITY,sun_x_position,sun_y_position);
+	Sun* new_sun = new Sun(vertical_speed,sun_x_position,sun_y_position);
 	suns.push_back(new_sun);
 }
 
@@ -269,7 +273,6 @@ void GamePlay::Generate_Produced_Sun(float current_global_time)
 		}
 	}
 }
-
 
 void GamePlay::Move_Zombies()
 {
@@ -388,4 +391,32 @@ bool GamePlay::GameOver(float house_x_position)
 	return false;
 }
 
+void GamePlay::Read_From_File(std::vector<std::pair<std::string,std::vector<float>>> &options , std::string file_path)
+{
+	std::pair <std::string , std::vector<float>> option;
+	std::string name;
+	std::string option_str;
 
+	std::fstream fin;
+	fin.open(file_path,std::ios::in);
+
+	std::string temp_str;
+	getline(fin,temp_str);
+
+	while(getline(fin,temp_str))
+	{
+		std::vector <float> option_data;
+		std::stringstream S(temp_str);
+		getline(S,name,SEPRATOR);
+		
+		while(getline(S,option_str,SEPRATOR))
+		{
+			option_data.push_back(std::stof(option_str));
+		}
+		option.first = name;
+		option.second = option_data;
+		options.push_back(option);
+	}	 
+
+	fin.close();
+}

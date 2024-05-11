@@ -1,108 +1,124 @@
 #include "plant.h"
 
-Plant::Plant(int selected_card_index)
+Plant::Plant(std::string type,std::vector<float> options)
 {
+	plant_options = options;
 	last_reaction_time = 0;
+	last_time_change_frame = 0;
 
-	if(selected_card_index == 0)
+	if(type == PLANT_TYPE_1)
 	{
 		name = PLANT_TYPE_1;
 		width = SUNFLOWER_WIDTH;
 		height = SUNFLOWER_HEIGHT;
-		action_speed = 5;
-		damage = SUNFLOWER_DAMAGE;
+		action_speed = plant_options[3];
+		health = plant_options[1];
 		shooter = false;
 		producer = true;
 
-		sf::Texture texture;
-		if(!texture.loadFromFile(PLANT_TYPE_1_TEXTURE_PATH))
-		{
-			std:: cout << "error in loading Sunflower texture !" << std::endl;
-		}
-		frames_texture.push_back(texture);
-		shape.setTexture(&frames_texture[0]);
+		Load_Frames(PLANT_TYPE_1_FRAMES_ROOT , PLANT_TYPE_1_NUM_OF_FRAMES);
+		shape.setTexture(&frames_texture[frame_index]);
 	}
-	else if(selected_card_index == 1)
+	else if(type == PLANT_TYPE_2)
 	{
 		name = PLANT_TYPE_2;
 		width = PEASHOOTER_WIDTH;
 		height = PEASHOOTER_HEIGHT;
-		action_speed = 2;
-		damage = PEASHOOTER_DAMAGE;
+		action_speed = plant_options[3];
+		health = plant_options[1];
 		shooter = true;
 		producer = false;
 
-		sf::Texture texture;
-		if(!texture.loadFromFile(PLANT_TYPE_2_TEXTURE_PATH))
-		{
-			std:: cout << "error in loading Sunflower texture !" << std::endl;
-		}
-		frames_texture.push_back(texture);
-		shape.setTexture(&frames_texture[0]);
+		Load_Frames(PLANT_TYPE_2_FRAMES_ROOT , PLANT_TYPE_2_NUM_OF_FRAMES);
+		shape.setTexture(&frames_texture[frame_index]);
 	}
-	else if(selected_card_index == 2)
+	else if(type == PLANT_TYPE_3)
 	{
 		name = PLANT_TYPE_3;
 		width = SNOW_PEASHOOTER_WIDTH;
 		height = SNOW_PEASHOOTER_HEIGHT;
-		action_speed = 2;
-		damage = SNOW_PEASHOOTER_DAMAGE;
+		action_speed = plant_options[3];
+		health = plant_options[1];
 		shooter = true;
 		producer = false;
 
-		sf::Texture texture;
-		if(!texture.loadFromFile(PLANT_TYPE_3_TEXTURE_PATH))
-		{
-			std:: cout << "error in loading Sunflower texture !" << std::endl;
-		}
-		frames_texture.push_back(texture);
-		shape.setTexture(&frames_texture[0]);
+		Load_Frames(PLANT_TYPE_3_FRAMES_ROOT , PLANT_TYPE_3_NUM_OF_FRAMES);
+		shape.setTexture(&frames_texture[frame_index]);
 
 	}
-	else if(selected_card_index == 3)
+	else if(type == PLANT_TYPE_4)
 	{
 		name = PLANT_TYPE_4;
-		width = WALLNUT_WIDTH;
-		height = WALLNUT_HEIGHT;
-		damage = WALLNUT_DAMAGE;
+		width = WALNUT_WIDTH;
+		height = WALNUT_HEIGHT;
+		health = plant_options[1];
 		shooter = false;
 		producer = false;
 
 		sf::Texture texture;
 		if(!texture.loadFromFile(PLANT_TYPE_4_TEXTURE_PATH))
 		{
-			std:: cout << "error in loading Walllnut texture !" << std::endl;
+			std:: cout << "error in loading Walnut texture !" << std::endl;
 		}
 		frames_texture.push_back(texture);
 
 		if(!texture.loadFromFile(PLANT_TYPE_4_CRACKED1_TEXTURE_PATH))
 		{
-			std:: cout << "error in loading Walllnut texture !" << std::endl;
+			std:: cout << "error in loading Walnut texture !" << std::endl;
 		}
 		frames_texture.push_back(texture);
 
 		if(!texture.loadFromFile(PLANT_TYPE_4_CRACKED2_TEXTURE_PATH))
 		{
-			std:: cout << "error in loading Walllnut texture !" << std::endl;
+			std:: cout << "error in loading Walnut texture !" << std::endl;
 		}
 		frames_texture.push_back(texture);
 		shape.setTexture(&frames_texture[0]);
 	}
 }
 
-void Plant::draw(sf::RenderWindow &window)
+void Plant::Load_Frames(std::string root_path , int num_of_frames)
 {
+	frame_rate = PLANT_FRAME_RATE;
 
+	frame_index = 0;
+
+	for(int i=0 ; i<num_of_frames ; i++)
+	{
+		sf::Texture texture;
+		std::ostringstream path;
+		path << root_path << i + 1 << ".png";
+		if(!texture.loadFromFile(path.str()))
+		{
+			std:: cout << "error in loading plant frames texture !" << std::endl;
+		}
+		frames_texture.push_back(texture);
+	}
+}
+
+void Plant::draw(sf::RenderWindow &window ,float current_global_time)
+{
 	if(name == PLANT_TYPE_4)
 	{
-		if(damage == WALLNUT_CRACKED1_DAMAGE)
+		if(damage == WALNUT_CRACKED1_DAMAGE)
 		{
 			shape.setTexture(&frames_texture[1]);
 
 		}
-		else if(damage == WALLNUT_CRACKED2_DAMAGE)
+		else if(damage == WALNUT_CRACKED2_DAMAGE)
 		{
 			shape.setTexture(&frames_texture[2]);
+		}
+	}
+	else
+	{
+		if(current_global_time - last_time_change_frame >= frame_rate)
+		{
+			frame_index ++;
+			last_time_change_frame = current_global_time;
+			if(frame_index == frames_texture.size())
+				frame_index = 0;
+			shape.setTexture(&frames_texture[frame_index]);	
 		}
 	}
 	window.draw(shape);
@@ -119,7 +135,7 @@ void Plant::set_Square(std::string l , std::string s , float square_width ,float
 Bullet* Plant::Shoot_Bullet(float current_global_time)
 {
 	sf::Vector2f shape_position = shape.getPosition();
-	Bullet* new_bullet = new Bullet(name,line_id,shape_position.x,shape_position.y,width,height);
+	Bullet* new_bullet = new Bullet(name,line_id,plant_options[4],plant_options[0],shape_position.x,shape_position.y,width,height);
 	last_reaction_time = current_global_time;
 	return new_bullet;
 }
@@ -160,9 +176,9 @@ bool Plant::is_Shooter()
 	return false;
 }
 
-void Plant::geting_Damage()
+void Plant::getting_Damage(float zombie_damage)
 {
-	damage --;
+	health -= zombie_damage;
 }
 
 float Plant::get_Width()
@@ -172,7 +188,7 @@ float Plant::get_Width()
 
 bool Plant::is_Dead()
 {
-	if(damage <=0 )
+	if(health <=0 )
 	{
 		return true;
 	}

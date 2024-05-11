@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
-#include "Menu.h"
+#include "menu.h"
 #include "functions.h"
 
 const float MENU_WIDTH = 1212;

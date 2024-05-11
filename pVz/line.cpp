@@ -44,10 +44,11 @@ bool Line::is_Square_Free(Plant *p)
 	return false;
 }
 
-Zombie* Line::Generate_Zombie()
+Zombie* Line::Generate_Zombie(std::pair <std::string,std::vector<float>> zombie_option)
 {
 	std::string new_zombie_id = std::to_string((std::stoi(id) + 1) * 100 + zombies.size());
-	Zombie *new_zombie  = new Zombie(new_zombie_id,id,squares[squares.size() - 1]->width + SQUARE_LENGTH , squares[squares.size() - 1]->height);
+	std::cout << zombie_option.first << std::endl;
+	Zombie *new_zombie  = new Zombie(zombie_option.first,zombie_option.second,new_zombie_id,id,squares[squares.size() - 1]->width + SQUARE_LENGTH , squares[squares.size() - 1]->height);
 	zombies.push_back(new_zombie);
 	deadline = true;
 	return new_zombie;
@@ -75,7 +76,7 @@ bool Line::is_Collided(Bullet *bullet)
 	sf::Vector2f bullet_position = bullet->get_Position();
 	for(int i=0 ; i<zombies.size(); i++)
 	{
-		if(zombies[i]->is_get_Shot(bullet_position,bullet->get_Type()))
+		if(zombies[i]->is_get_Shot(bullet_position,bullet->get_Type(),bullet->get_damage()))
 			return true;
 	}
 	return false;
@@ -90,7 +91,7 @@ void Line::Eat_Plant(Zombie* zombie , float current_global_time)
 		{
 			zombie->Stop();
 			zombie->Bite(current_global_time);
-			plants[i]->geting_Damage();
+			plants[i]->getting_Damage(zombie->get_Damage());
 			eating_sound.play();
 			zombie_eating_status = true;
 		}

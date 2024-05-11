@@ -1,11 +1,11 @@
 #include "card.h"
 
-Card::Card(std::string n,int pr,float x_position , float y_position, std::string on_card_path ,  std::string off_card_path , float invalid_t)
+Card::Card(std::string n,std::vector<float> options,float x_position , float y_position, std::string on_card_path ,  std::string off_card_path)
 {
 	name = n;
-	invalid_time = invalid_t;
+	invalid_time = options[2];
 	validation = false;
-	price = pr;
+	price = options[5];
 	last_time_selected = 0;
 
 	shape.setSize(sf::Vector2f(CARD_WIDTH,CARD_HEIGHT));
@@ -69,4 +69,9 @@ void Card::Payment(int &score,float current_global_time)
 		score+= price;
 	last_time_selected = current_global_time;
 	validation = false;
+}
+
+std::string Card::get_name()
+{
+	return name;
 }

@@ -15,7 +15,7 @@ public:
 	Line(float x , float y , std::string n);
 	bool is_Square_Range(sf::Vector2i localPosition,Plant *p);
 	bool is_Square_Free(Plant *p);
-	Zombie * Generate_Zombie();
+	Zombie * Generate_Zombie(std::pair <std::string,std::vector<float>> zombie_option);
 	bool is_Deadline(Plant* plant);
 	bool is_Collided(Bullet *bullet);
 	void Eat_Plant(Zombie* zombie,float current_global_time);
