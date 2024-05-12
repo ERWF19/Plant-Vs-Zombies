@@ -1,13 +1,15 @@
 #include "zombie.h"
 
-Zombie::Zombie(std::string z_type,std::vector<float> options,std::string i , std::string l_i ,float x0 ,float  y0)
+Zombie::Zombie(std::string z_type,std::vector<float> opt,std::string i , std::string l_i ,float x0 ,float  y0)
 {
 	type = z_type;
-
+	options = opt;
 	last_time_change_frame = 0;
+	freeze_time = options[4];
 	id = i;
 	line_id = l_i;
 	eat_status = false;
+	freeze_status = false;
 
 	if(type == ZOMBIE_TYPE_1)
 	{
@@ -42,7 +44,7 @@ Zombie::Zombie(std::string z_type,std::vector<float> options,std::string i , std
 
 		shape.setSize(sf::Vector2f(width,height));
 		shape.setTexture(&walking_frames_texture[walking_frame_index]);
-		shape.setPosition(sf::Vector2f(x0,y0 - 250));
+		shape.setPosition(sf::Vector2f(x0,y0 + ZOMBIE_TYPE_2_CHANGE_Y_POSITION));
 	}
 }
 
@@ -86,6 +88,10 @@ void Zombie::Move()
 void Zombie::draw(sf::RenderWindow &window , float current_global_time)
 {
 	window.draw(shape);
+	if(freeze_status)
+	{
+		shape.setFillColor(sf::Color::Blue);
+	}
 	if(eat_status)
 	{
 		if(current_global_time - last_time_change_frame >= frame_rate)
@@ -105,24 +111,36 @@ void Zombie::draw(sf::RenderWindow &window , float current_global_time)
 			last_time_change_frame = current_global_time;
 			if(walking_frame_index == walking_frames_texture.size())
 				walking_frame_index = 0;
-			shape.setTexture(&walking_frames_texture[walking_frame_index]);	
+			shape.setTexture(&walking_frames_texture[walking_frame_index]);
 		}	
 	}	
 }
 
-bool Zombie::is_get_Shot(sf::Vector2f bullet_position ,std::string bullet_type,float bullet_damage)
+bool Zombie::is_get_Shot(sf::Vector2f bullet_position ,std::string bullet_type,float bullet_damage,float current_global_time)
 { 
-		if(bullet_position.x >= shape.getPosition().x && bullet_position.y >= shape.getPosition().y + 50)
+		if(bullet_position.x >= shape.getPosition().x && bullet_position.y >= shape.getPosition().y + 25)
 		{
 			if(bullet_type == "Ice Bullet")
 			{
-				if(type == ZOMBIE_TYPE_1)
-					velocity = ZOMBIE_TYPE_1_VELOCITY/2;
-				else if(type == ZOMBIE_TYPE_2)
-					velocity = ZOMBIE_TYPE_2_VELOCITY/2;
+				if(!eat_status)
+				{
+					velocity = (-options[3])/2;
+					walk_again_velocity = velocity;
+				}
+				else
+				{
+					walk_again_velocity = -options[3];
+				}
 
-				walk_again_velocity = velocity;
+				freeze_status = true;
+				last_time_freezed = current_global_time;
 			}
+			else
+			{
+				walk_again_velocity = velocity;
+
+			}
+
 			health -= bullet_damage;
 			return true;
 		}
@@ -167,7 +185,7 @@ bool Zombie::is_Bite_Time(float current_global_time)
 
 bool Zombie::Are_You_Okay()
 {
-	if(health == 0)
+	if(health <= 0)
 		return false;
 	else
 		return true;
@@ -188,4 +206,13 @@ float Zombie::get_Damage()
 float Zombie::get_Velocity()
 {
 	return velocity;
+}
+
+void Zombie::Check_Ice_Break(float current_global_time)
+{
+	if(current_global_time - last_time_freezed >= freeze_time)
+	{
+		freeze_status = false;
+		shape.setFillColor(sf::Color::White);
+	}
 }

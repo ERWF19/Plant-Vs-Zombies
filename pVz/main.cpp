@@ -14,11 +14,8 @@ const std::string Command_Type_3 = "Exit";
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(MENU_WIDTH,MENU_HEIGHT),"test window");
-
 	window.setFramerateLimit(FRAME_RATE_LIMIT);
-	
 	Menu menu(window.getSize().x,window.getSize().y);
-
 	menu.play_music();
 
 	while(window.isOpen())

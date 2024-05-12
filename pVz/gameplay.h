@@ -24,8 +24,8 @@ const std::string PLANT_OFF_CARD_ROOT = "pic/cards/off_";
 
 
 const int NUM_OF_CARDS = 5;
-const float FIRST_LINE_X_POSITION = 311;
-const float FIRST_LINE_Y_POSITION = 138;
+const float FIRST_LINE_X_POSITION = 492;
+const float FIRST_LINE_Y_POSITION = 188;
 const float FIRST_CARD_COORDINATE_X = 50;
 const float FIRST_CARD_COORDINATE_Y = 30;
 
@@ -63,7 +63,7 @@ public:
 	Line* Find_Line(std::string line_id);
 	void Move_Bullets(float current_global_time);
 	void Draw_Bullets(sf::RenderWindow &window);
-	void Bullet_Impact();
+	void Bullet_Impact(float current_global_time);
 	void Kill_Plants(float current_global_time);
 	void Plants_Death();
 	void Zombies_Death();
@@ -76,13 +76,12 @@ public:
 	void Generate_Produced_Sun(float current_global_time);
 	void Sort_Zombies();
 	void Sort_By_Line();
-
-
+	bool is_Any_Zombie_Left();
+	void Break_Ice(float current_global_time);
 
 private:
 	std::vector<std::pair<std::string,std::vector<float>>> plants_options;
 	std::vector<std::pair<std::string,std::vector<float>>> zombies_options;
-
 	
 	int sun_score;
 	sf::RectangleShape score_background;

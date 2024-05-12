@@ -6,17 +6,14 @@ void Play(sf::RenderWindow &window)
 
 	std::vector<float> attacks_options;
 	std::vector<float> falling_sun_options;
-
-
+	
 	Read_From_File(attacks_options,ATTACKS_OPTION_PATH);
 	Read_From_File(falling_sun_options,FALLING_SUN_OPTION_PATH);
 
-
 	sf::Clock global_time;
-	sf::Clock zombieـperiodicity;
+	sf::Clock wave_periodicity;
+	sf::Clock generate_zombie_periodicity;
 	sf::Clock falling_sun_periodicity;
-	sf::Clock produced_sun_periodicity;
-
 
 	sf::Music soundtrack;
 	if(!soundtrack.openFromFile(MAIN_SOUNDTRACK_PATH))
@@ -50,19 +47,27 @@ void Play(sf::RenderWindow &window)
 				window.close();
 		}
 
-
 		if(global_time.getElapsedTime().asSeconds() > attacks_options[1] &&  global_time.getElapsedTime().asSeconds() < attacks_options[1] + 0.02)
 			zombie_intro_sound.play();
 
-		if(global_time.getElapsedTime().asSeconds() <= attacks_options[0])
+		if(global_time.getElapsedTime().asSeconds() <= attacks_options[0] + 1)
 		{
-			if(zombieـperiodicity.getElapsedTime().asSeconds() >=  attacks_options[1])
+			if(wave_periodicity.getElapsedTime().asSeconds() >=  attacks_options[1])
 			{
 				for(int i=0 ; i<attacks_options[2] ; i++)
 					gameplay.Generate_Zombie();
 				attacks_options[2] += attacks_options[3];
-				zombieـperiodicity.restart();
+				wave_periodicity.restart();
 
+			}
+		}
+		else 
+		{
+			if(!gameplay.is_Any_Zombie_Left())
+			{
+				soundtrack.stop();	
+				Win(window);
+				break;
 			}
 		}
 
@@ -73,12 +78,6 @@ void Play(sf::RenderWindow &window)
 			float sun_y_position = FALLING_SUN_PRIMARY_Y_POSITION;
 			gameplay.Generate_Falling_Sun(sun_x_position,sun_y_position,falling_sun_options[0]);
 			falling_sun_periodicity.restart();
-		}
-
-		if(produced_sun_periodicity.getElapsedTime().asSeconds() >= 10)
-		{
-			gameplay.Generate_Produced_Sun(global_time.getElapsedTime().asSeconds());
-			produced_sun_periodicity.restart();
 		}
 
 		if(gameplay.GameOver(HOUSE_X_POSITION))
@@ -96,12 +95,14 @@ void Play(sf::RenderWindow &window)
 			break;
 		}
 
+		gameplay.Generate_Produced_Sun(global_time.getElapsedTime().asSeconds());
+		gameplay.Break_Ice(global_time.getElapsedTime().asSeconds());
 		gameplay.Sort_Zombies();
 		gameplay.Plants_Fire(global_time.getElapsedTime().asSeconds());
 		gameplay.Move_Zombies();
 		gameplay.Move_Bullets(global_time.getElapsedTime().asSeconds());
 		gameplay.Move_Falling_Suns();
-		gameplay.Bullet_Impact();
+		gameplay.Bullet_Impact(global_time.getElapsedTime().asSeconds());
 		gameplay.Zombies_Death();
 		gameplay.Plants_Death();
 		gameplay.Kill_Plants(global_time.getElapsedTime().asSeconds());
@@ -109,4 +110,5 @@ void Play(sf::RenderWindow &window)
 		gameplay.draw(window,global_time.getElapsedTime().asSeconds());
 		window.display();
 	}
+
 }

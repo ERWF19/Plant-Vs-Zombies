@@ -14,19 +14,20 @@ Line::Line(float x , float y , std::string n)
 	for(int i=0 ; i<NUM_OF_SQUARE ; i++)
 	{
 		Square *s = new Square(x + (SQUARE_LENGTH *i),y,id,std::to_string(i));
+		x+=2;
 		squares.push_back(s);
 	}
 }
 
 
-bool Line::is_Square_Range(sf::Vector2i localPosition ,Plant *p)
+bool Line::is_Square_Range(sf::Vector2i globalPosition ,Plant *p)
 {
 	for(int i=0 ; i<NUM_OF_SQUARE ; i++)
 	{
-		if(localPosition.x >= squares[i]->width && localPosition.x <= squares[i]->width + SQUARE_LENGTH
-		 	&& localPosition.y >= squares[i]->height && localPosition.y <= squares[i]->height + SQUARE_LENGTH)
+		if(globalPosition.x >= squares[i]->x_position && globalPosition.x <= squares[i]->x_position + SQUARE_LENGTH
+		 	&& globalPosition.y >= squares[i]->y_position && globalPosition.y <= squares[i]->y_position + SQUARE_LENGTH)
 		{ 
-			p->set_Square(id,squares[i]->get_id() , squares[i]->width , squares[i]->height);
+			p->set_Square(id,squares[i]->get_id() , squares[i]->x_position , squares[i]->y_position);
 			return true;
 		}
 	}
@@ -47,8 +48,7 @@ bool Line::is_Square_Free(Plant *p)
 Zombie* Line::Generate_Zombie(std::pair <std::string,std::vector<float>> zombie_option)
 {
 	std::string new_zombie_id = std::to_string((std::stoi(id) + 1) * 100 + zombies.size());
-	std::cout << zombie_option.first << std::endl;
-	Zombie *new_zombie  = new Zombie(zombie_option.first,zombie_option.second,new_zombie_id,id,squares[squares.size() - 1]->width + SQUARE_LENGTH , squares[squares.size() - 1]->height);
+	Zombie *new_zombie  = new Zombie(zombie_option.first,zombie_option.second,new_zombie_id,id,squares[squares.size() - 1]->x_position + SQUARE_LENGTH , squares[squares.size() - 1]->y_position);
 	zombies.push_back(new_zombie);
 	deadline = true;
 	return new_zombie;
@@ -71,12 +71,12 @@ bool Line::is_Deadline(Plant* plant)
 	return false;
 }
 
-bool Line::is_Collided(Bullet *bullet)
+bool Line::is_Collided(Bullet *bullet,float current_global_time)
 {
 	sf::Vector2f bullet_position = bullet->get_Position();
 	for(int i=0 ; i<zombies.size(); i++)
 	{
-		if(zombies[i]->is_get_Shot(bullet_position,bullet->get_Type(),bullet->get_damage()))
+		if(zombies[i]->is_get_Shot(bullet_position,bullet->get_Type(),bullet->get_damage(),current_global_time))
 			return true;
 	}
 	return false;

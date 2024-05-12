@@ -2,8 +2,8 @@
 
 Square::Square(float x , float y , std::string l_i , std::string i)
 {
-	width = x;
-	height = y;
+	x_position = x;
+	y_position = y;
 	free = true;
 	line_id = l_i;
 	id = i;

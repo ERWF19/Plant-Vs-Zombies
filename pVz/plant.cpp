@@ -1,14 +1,15 @@
 #include "plant.h"
 
-Plant::Plant(std::string type,std::vector<float> options)
+Plant::Plant(std::string t,std::vector<float> options)
 {
+	type = t;
 	plant_options = options;
 	last_reaction_time = 0;
 	last_time_change_frame = 0;
 
 	if(type == PLANT_TYPE_1)
 	{
-		name = PLANT_TYPE_1;
+		type = PLANT_TYPE_1;
 		width = SUNFLOWER_WIDTH;
 		height = SUNFLOWER_HEIGHT;
 		action_speed = plant_options[3];
@@ -21,7 +22,7 @@ Plant::Plant(std::string type,std::vector<float> options)
 	}
 	else if(type == PLANT_TYPE_2)
 	{
-		name = PLANT_TYPE_2;
+		type = PLANT_TYPE_2;
 		width = PEASHOOTER_WIDTH;
 		height = PEASHOOTER_HEIGHT;
 		action_speed = plant_options[3];
@@ -34,7 +35,7 @@ Plant::Plant(std::string type,std::vector<float> options)
 	}
 	else if(type == PLANT_TYPE_3)
 	{
-		name = PLANT_TYPE_3;
+		type = PLANT_TYPE_3;
 		width = SNOW_PEASHOOTER_WIDTH;
 		height = SNOW_PEASHOOTER_HEIGHT;
 		action_speed = plant_options[3];
@@ -48,7 +49,7 @@ Plant::Plant(std::string type,std::vector<float> options)
 	}
 	else if(type == PLANT_TYPE_4)
 	{
-		name = PLANT_TYPE_4;
+		type = PLANT_TYPE_4;
 		width = WALNUT_WIDTH;
 		height = WALNUT_HEIGHT;
 		health = plant_options[1];
@@ -77,7 +78,7 @@ Plant::Plant(std::string type,std::vector<float> options)
 	}
 	else if(type == PLANT_TYPE_5)
 	{
-		name = PLANT_TYPE_5;
+		type = PLANT_TYPE_5;
 		width = MELON_PULT_WIDTH;
 		height = MELON_PULT_HEIGHT;
 		action_speed = plant_options[3];
@@ -86,6 +87,19 @@ Plant::Plant(std::string type,std::vector<float> options)
 		producer = false;
 
 		Load_Frames(PLANT_TYPE_5_FRAMES_ROOT , PLANT_TYPE_5_NUM_OF_FRAMES);
+		shape.setTexture(&frames_texture[frame_index]);
+	}
+	else if(type ==PLANT_TYPE_6)
+	{
+		type = PLANT_TYPE_6;
+		width = KERNEL_PULT_WIDTH;
+		height = KERNEL_PULT_WIDTH;
+		action_speed = plant_options[3];
+		health = plant_options[1];
+		shooter = true;
+		producer = false;
+
+		Load_Frames(PLANT_TYPE_6_FRAMES_ROOT , PLANT_TYPE_6_NUM_OF_FRAMES);
 		shape.setTexture(&frames_texture[frame_index]);
 	}
 }
@@ -111,14 +125,14 @@ void Plant::Load_Frames(std::string root_path , int num_of_frames)
 
 void Plant::draw(sf::RenderWindow &window ,float current_global_time)
 {
-	if(name == PLANT_TYPE_4)
+	if(type == PLANT_TYPE_4)
 	{
-		if(damage == damage/2)
+		if(health == (plant_options[1]/2))
 		{
 			shape.setTexture(&frames_texture[1]);
 
 		}
-		else if(damage == damage/4)
+		else if(health == (plant_options[1]/4))
 		{
 			shape.setTexture(&frames_texture[2]);
 		}
@@ -137,18 +151,22 @@ void Plant::draw(sf::RenderWindow &window ,float current_global_time)
 	window.draw(shape);
 }
 
-void Plant::set_Square(std::string l , std::string s , float square_width ,float square_height)
+void Plant::set_Square(std::string l,std::string s,float square_x_position,float square_y_position)
 {
+	std::cout << type<< std::endl;
 	square_id = s;
 	line_id =l;
 	shape.setSize(sf::Vector2f(width,height));
-	shape.setPosition(sf::Vector2f(square_width,square_height));
+	if(type == PLANT_TYPE_5 || type == PLANT_TYPE_6)
+		shape.setPosition(sf::Vector2f(square_x_position - 20,square_y_position-20));
+	else
+		shape.setPosition(sf::Vector2f(square_x_position,square_y_position));
 }
 
 Bullet* Plant::Shoot_Bullet(float current_global_time,sf::Vector2f target_position,float target_velocity)
 {
 	sf::Vector2f shape_position = shape.getPosition();
-	Bullet* new_bullet = new Bullet(name,line_id,plant_options[4],plant_options[0],current_global_time,shape.getPosition(),target_position,target_velocity,shape_position.x,shape_position.y,width,height);
+	Bullet* new_bullet = new Bullet(type,line_id,plant_options[4],plant_options[0],current_global_time,shape.getPosition(),target_position,target_velocity,shape_position.x,shape_position.y,width,height);
 	last_reaction_time = current_global_time;
 	return new_bullet;
 }

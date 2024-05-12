@@ -8,16 +8,25 @@ const std::string PLANT_TYPE_2 = "peashooter";
 const std::string PLANT_TYPE_3 = "snow_peashooter";
 const std::string PLANT_TYPE_4 = "walnut";
 const std::string PLANT_TYPE_5 = "melonPult";
+const std::string PLANT_TYPE_6 = "kernelPult";
 
 
 const std::string BULLET_TYPE_1 = "Pea Bullet";
 const std::string BULLET_TYPE_2 = "Ice Bullet";
 const std::string BULLET_TYPE_3 = "Melon Bullet";
+const std::string BULLET_TYPE_4 = "Kernel Bullet";
+
+const float BULLET_TYPE_1_SIZE = 10;
+const float BULLET_TYPE_2_SIZE = 10;
+const float BULLET_TYPE_3_SIZE = 18;
+const float BULLET_TYPE_4_SIZE = 25;
 
 
 const std::string BULLET_TYPE_1_TEXTURE_PATH = "pic/bullets/pea.png";
 const std::string BULLET_TYPE_2_TEXTURE_PATH = "pic/bullets/snow_pea.png";
 const std::string BULLET_TYPE_3_TEXTURE_PATH = "pic/bullets/melon.png";
+const std::string BULLET_TYPE_4_TEXTURE_PATH = "pic/bullets/kernel.png";
+
 
 
 class Bullet

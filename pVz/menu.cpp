@@ -60,7 +60,8 @@ void Menu::Move_Mouse(sf::RenderWindow &window)
 	for(int i=0 ; i<MAX_NUMBER_OF_TEXT ; i++)
 	{
 		text_position = text[i].getPosition();
-		if(localPosition.x >= text_position.x && localPosition.x <= text_position.x +(2 * CHAR_SIZE) && localPosition.y >= text_position.y && localPosition.y < text_position.y + CHAR_SIZE)
+		if(localPosition.x >= text_position.x && localPosition.x <= text_position.x +(2 * CHAR_SIZE) &&
+		    localPosition.y >= text_position.y && localPosition.y < text_position.y + CHAR_SIZE)
 		{
 			text[i].setFillColor(sf::Color::Red);
 			selected_item_index = i;

@@ -15,7 +15,7 @@ Bullet::Bullet(std::string plant_name,std::string l_i,float v,float d,float curr
 		}
 
 		line_id = l_i;
-		shape.setRadius(15);
+		shape.setRadius(BULLET_TYPE_1_SIZE);
 		shape.setTexture(&bullet_texture);
 		shape.setPosition(sf::Vector2f(x_plant + plant_width - 15 , y_plant + 0.2 * plant_height - 10));
 		velocity = v;
@@ -30,7 +30,7 @@ Bullet::Bullet(std::string plant_name,std::string l_i,float v,float d,float curr
 			std:: cout << "error in loading bullet texture !" << std::endl;
 		}
 		line_id = l_i;
-		shape.setRadius(15);
+		shape.setRadius(BULLET_TYPE_2_SIZE);
 		shape.setTexture(&bullet_texture);
 		shape.setPosition(sf::Vector2f(x_plant + plant_width - 15 , y_plant + 0.2 * plant_height - 10));	
 		velocity = v;
@@ -43,7 +43,7 @@ Bullet::Bullet(std::string plant_name,std::string l_i,float v,float d,float curr
 		{
 			std:: cout << "error in loading bullet texture !" << std::endl;
 		}
-		shape.setRadius(20);
+		shape.setRadius(BULLET_TYPE_3_SIZE);
 		shape.setTexture(&bullet_texture);
 		shape.setPosition(sf::Vector2f(x_plant +10 , y_plant +10));	
 
@@ -54,6 +54,23 @@ Bullet::Bullet(std::string plant_name,std::string l_i,float v,float d,float curr
 		damage = d;
 		type = BULLET_TYPE_3;
 	}
+	else if(plant_name == PLANT_TYPE_6)
+	{
+		if(!bullet_texture.loadFromFile(BULLET_TYPE_4_TEXTURE_PATH))
+		{
+			std:: cout << "error in loading bullet texture !" << std::endl;
+		}
+		shape.setRadius(BULLET_TYPE_4_SIZE);
+		shape.setTexture(&bullet_texture);
+		shape.setPosition(sf::Vector2f(x_plant +10 , y_plant +10));	
+
+		line_id = l_i;
+		velocity = v;
+		horizontal_velocity = v;
+		vertical_velocity = -v;
+		damage = d;
+		type = BULLET_TYPE_4;
+	}
 
 }
 
@@ -61,7 +78,7 @@ void Bullet::Move(float current_global_time)
 {
 	float fly_time = (target_position.x - plant_position.x - 150)/(target_velocity + horizontal_velocity);
 	float a = (2*velocity)/fly_time;
-	if(type == BULLET_TYPE_3)
+	if(type == BULLET_TYPE_3 || type == BULLET_TYPE_4)
 	{
 		shape.move(horizontal_velocity,vertical_velocity);
 

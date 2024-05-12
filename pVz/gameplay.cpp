@@ -13,8 +13,7 @@ GamePlay::GamePlay(float width , float height)
 	{
 		std:: cout << "Error in loading throw sound !" << std::endl;
 	}
-	throw_sound.setBuffer(buffer);
-	
+	throw_sound.setBuffer(buffer);	
 }
 
 void GamePlay::Load_Background(float width , float height)
@@ -29,7 +28,7 @@ void GamePlay::Load_Background(float width , float height)
 
 	for(int i=0 ; i<NUM_OF_LINE ; i++)
 	{
-		Line *l = new Line(FIRST_LINE_X_POSITION,FIRST_LINE_Y_POSITION + (SQUARE_LENGTH * i),std::to_string(i));
+		Line *l = new Line(FIRST_LINE_X_POSITION,FIRST_LINE_Y_POSITION + ((SQUARE_LENGTH +20) *i),std::to_string(i));
 		lines.push_back(l);
 	}
 }
@@ -102,7 +101,6 @@ void GamePlay::Move_Mouse(sf::RenderWindow &window)
 	sf::Vector2f card_position;
 	for(int i=0 ; i<cards.size() ; i++)
 	{
-
 		card_position = cards[i]->getPosition();
 		if(localPosition.x >= card_position.x && localPosition.x <= card_position.x + CARD_WIDTH
 			&& localPosition.y >= card_position.y && localPosition.y <= card_position.y + CARD_HEIGHT)
@@ -333,13 +331,13 @@ void GamePlay::Move_Bullets(float current_global_time)
 	}
 }
 
-void GamePlay::Bullet_Impact()
+void GamePlay::Bullet_Impact(float current_global_time)
 {
 	Line* bullet_line;
 	for(int i=0 ; i<bullets.size() ; i++)
 	{
 		bullet_line = Find_Line(bullets[i]->line_id);
-		if(bullet_line->is_Collided(bullets[i]))
+		if(bullet_line->is_Collided(bullets[i],current_global_time))
 		{
 			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
@@ -450,5 +448,21 @@ void GamePlay::Sort_By_Line()
 				zombies[j+1] = temp_zombie;
 			}
 		}
+	}
+}
+
+
+bool GamePlay::is_Any_Zombie_Left()
+{
+	if(zombies.size() == 0)
+		return false;
+	return true;
+}
+
+void GamePlay::Break_Ice(float current_global_time)
+{
+	for(int i=0 ; i <zombies.size() ; i++)
+	{
+		zombies[i]->Check_Ice_Break(current_global_time);
 	}
 }
