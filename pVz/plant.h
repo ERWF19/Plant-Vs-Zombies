@@ -21,7 +21,7 @@ const int PLANT_TYPE_1_NUM_OF_FRAMES = 61;
 const int PLANT_TYPE_2_NUM_OF_FRAMES = 39;
 const int PLANT_TYPE_3_NUM_OF_FRAMES = 31;
 const int PLANT_TYPE_5_NUM_OF_FRAMES = 24;
-const int PLANT_TYPE_6_NUM_OF_FRAMES = 1;
+const int PLANT_TYPE_6_NUM_OF_FRAMES = 53;
 
 
 const float SUNFLOWER_WIDTH = 80;
@@ -33,9 +33,9 @@ const float SNOW_PEASHOOTER_HEIGHT = 80;
 const float WALNUT_WIDTH = 80;
 const float WALNUT_HEIGHT = 80;
 const float MELON_PULT_WIDTH = 100;
-const float MELON_PULT_HEIGHT = 100;
-const float KERNEL_PULT_WIDTH = 80;
-const float KERNEL_PULT_HEIGHT = 80;
+const float MELON_PULT_HEIGHT = 105;
+const float KERNEL_PULT_WIDTH = 110;
+const float KERNEL_PULT_HEIGHT = 110;
 
 
 

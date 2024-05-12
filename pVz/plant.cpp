@@ -153,7 +153,6 @@ void Plant::draw(sf::RenderWindow &window ,float current_global_time)
 
 void Plant::set_Square(std::string l,std::string s,float square_x_position,float square_y_position)
 {
-	std::cout << type<< std::endl;
 	square_id = s;
 	line_id =l;
 	shape.setSize(sf::Vector2f(width,height));
