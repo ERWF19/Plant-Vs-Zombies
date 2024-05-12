@@ -5,7 +5,7 @@
 
 
 
-const float HOUSE_X_POSITION = 270;
+const float HOUSE_X_POSITION = 180;
 const float DEAD_TEXT_CHAR_SIZE = 150;
 const float DEAD_TEXT_X_POSITION = 225;
 const float DEAD_TEXT_Y_POSITION = 60;

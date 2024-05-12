@@ -111,28 +111,33 @@ void Zombie::draw(sf::RenderWindow &window , float current_global_time)
 }
 
 bool Zombie::is_get_Shot(sf::Vector2f bullet_position ,std::string bullet_type,float bullet_damage)
-{
-	if(bullet_position.x >= shape.getPosition().x)
-	{
-		if(bullet_type == "Ice Bullet")
+{ 
+		if(bullet_position.x >= shape.getPosition().x && bullet_position.y >= shape.getPosition().y + 50)
 		{
-			if(type == ZOMBIE_TYPE_1)
-				velocity = ZOMBIE_TYPE_1_VELOCITY/2;
-			else if(type == ZOMBIE_TYPE_2)
-				velocity = ZOMBIE_TYPE_2_VELOCITY/2;
+			if(bullet_type == "Ice Bullet")
+			{
+				if(type == ZOMBIE_TYPE_1)
+					velocity = ZOMBIE_TYPE_1_VELOCITY/2;
+				else if(type == ZOMBIE_TYPE_2)
+					velocity = ZOMBIE_TYPE_2_VELOCITY/2;
 
-			walk_again_velocity = velocity;
+				walk_again_velocity = velocity;
+			}
+			health -= bullet_damage;
+			return true;
 		}
-		health -= bullet_damage;
-		return true;
-	}
-	return false;
+		return false;
 }
 
 
 float Zombie::get_x_Position()
 {
 	return shape.getPosition().x;
+}
+
+float Zombie::get_y_Position()
+{
+	return shape.getPosition().y;
 }
 
 void Zombie::Stop()
@@ -178,4 +183,9 @@ bool Zombie::is_House_Reached(float house_x_position)
 float Zombie::get_Damage()
 {
 	return damage;
+}
+
+float Zombie::get_Velocity()
+{
+	return velocity;
 }

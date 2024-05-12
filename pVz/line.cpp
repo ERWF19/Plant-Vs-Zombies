@@ -124,7 +124,7 @@ void Line::Add_Plant(Plant* plant)
 	plants.push_back(plant);
 }
 
-void Line:: Delete_Zombie(Zombie *zombie)
+void Line::Delete_Zombie(Zombie *zombie)
 {
 	for(int i=0 ; i<zombies.size() ; i++)
 	{
@@ -134,4 +134,42 @@ void Line:: Delete_Zombie(Zombie *zombie)
 			break;
 		}
 	}	
+}
+
+void Line::Sort_Zombies_By_X_Position()
+{
+	Zombie* temp_zombie;
+	for(int i=0;  i<zombies.size() ; i++)
+	{
+		for(int j=0 ; j<zombies.size() - 1 ;j++)
+		{
+			if(zombies[j]->get_x_Position() > zombies[j+1]->get_x_Position())
+			{
+				temp_zombie = zombies[j];
+				zombies[j] = zombies[j+1];
+				zombies[j+1] = temp_zombie;
+			}
+		}
+	}
+}
+
+float Line::get_First_Zombie_Velocity()
+{	
+	return zombies[0]->get_Velocity();
+}
+
+sf::Vector2f Line::get_First_Zombie_Position()
+{
+	sf::Vector2f position;
+	position.x = zombies[0]->get_x_Position();
+	position.y = zombies[0]->get_y_Position();
+	return position;
+}
+
+
+bool Line::is_Zombie_Coming()
+{
+	if(zombies.size() != 0)
+		return true;
+	return false;
 }

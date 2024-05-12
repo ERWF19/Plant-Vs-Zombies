@@ -72,8 +72,8 @@ void GamePlay::Load_Cards()
 	for(int i=0 ; i<plants_options.size() ; i++)
 	{
 		std::ostringstream on_path , off_path;
-		on_path << "pic/cards/on_" << plants_options[i].first << ".png"; 
-		off_path <<	"pic/cards/off_" << plants_options[i].first << ".png"; 
+		on_path << PLANT_ON_CARD_ROOT << plants_options[i].first << ".png"; 
+		off_path <<	PLANT_OFF_CARD_ROOT << plants_options[i].first << ".png"; 
 		std::string on_card_path = on_path.str();
 		std::string off_card_path = off_path.str();
 
@@ -86,6 +86,7 @@ void GamePlay::Load_Cards()
 
 void GamePlay::draw(sf::RenderWindow &window ,float current_global_time)
 {
+
 	window.draw(playground);
 	Draw_Sun_Score(window);
 	Draw_Cards(window,current_global_time);
@@ -157,6 +158,7 @@ void GamePlay::Card_Selection(sf::RenderWindow &window , float current_global_ti
 					{
 						if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
 						{
+
 							Line* plant_line = Find_Line(new_plant->line_id);
 							plant_line->Add_Plant(new_plant);
 							selected_statement =  !is_Valid_Square(new_plant);
@@ -295,14 +297,19 @@ void GamePlay::Plants_Fire(float current_global_time)
 	for(int i=0 ; i<plants.size() ; i++)
 	{
 		Line *plant_line = Find_Line(plants[i]->line_id);
-
-		if(plants[i]->is_Act_Time(current_global_time) && plants[i]->is_Shooter())
+		if(plant_line->is_Zombie_Coming())
 		{
-			if(plant_line->is_Deadline(plants[i]))
+			float zombie_velocity = plant_line->get_First_Zombie_Velocity();
+			sf::Vector2f zombie_position = plant_line->get_First_Zombie_Position();
+			if(plants[i]->is_Act_Time(current_global_time) && plants[i]->is_Shooter())
 			{
-				Bullet* new_bullet = plants[i]->Shoot_Bullet(current_global_time);
-				throw_sound.play();
-				bullets.push_back(new_bullet);
+				if(plant_line->is_Deadline(plants[i]))
+				{
+					Bullet* new_bullet = plants[i]->Shoot_Bullet(current_global_time,zombie_position,zombie_velocity);
+					throw_sound.play();
+					bullets.push_back(new_bullet);
+
+				}
 			}
 		}
 	}
@@ -318,11 +325,11 @@ Line* GamePlay::Find_Line(std::string line_id)
 	return NULL;
 }
 
-void GamePlay::Move_Bullets()
+void GamePlay::Move_Bullets(float current_global_time)
 {
 	for(int i=0 ; i<bullets.size() ; i++)
 	{
-		bullets[i]->Move();
+		bullets[i]->Move(current_global_time);
 	}
 }
 
@@ -419,4 +426,29 @@ void GamePlay::Read_From_File(std::vector<std::pair<std::string,std::vector<floa
 	}	 
 
 	fin.close();
+}
+void GamePlay::Sort_Zombies()
+{
+	Sort_By_Line();
+	for(int i=0 ; i<lines.size() ; i++)
+	{
+		lines[i]->Sort_Zombies_By_X_Position();
+	}
+}
+
+void GamePlay::Sort_By_Line()
+{
+	Zombie* temp_zombie;
+	for(int i=0;  i<zombies.size() ; i++)
+	{
+		for(int j=0 ; j<zombies.size() - 1 ;j++)
+		{
+			if(zombies[j]->line_id > zombies[j+1]->line_id)
+			{
+				temp_zombie = zombies[j];
+				zombies[j] = zombies[j+1];
+				zombies[j+1] = temp_zombie;
+			}
+		}
+	}
 }

@@ -6,21 +6,21 @@
 
 
 
-const std::string PLANT_TYPE_1_TEXTURE_PATH = "pic/sunflower.png";
-const std::string PLANT_TYPE_2_TEXTURE_PATH = "pic/peashooter.png";
-const std::string PLANT_TYPE_3_TEXTURE_PATH = "pic/snow peashooter.png";
+
+const std::string PLANT_TYPE_1_FRAMES_ROOT = "pic/frames/sunflower_frames/";
+const std::string PLANT_TYPE_2_FRAMES_ROOT = "pic/frames/peashooter_frames/";
+const std::string PLANT_TYPE_3_FRAMES_ROOT = "pic/frames/snow_peashooter_frames/";
+const std::string PLANT_TYPE_5_FRAMES_ROOT = "pic/frames/melonPult_frames/";
 const std::string PLANT_TYPE_4_TEXTURE_PATH = "pic/frames/walnut_frames/walnut.png";
 const std::string PLANT_TYPE_4_CRACKED1_TEXTURE_PATH = "pic/frames/walnut_frames/walnut_cracked1.png";
 const std::string PLANT_TYPE_4_CRACKED2_TEXTURE_PATH = "pic/frames/walnut_frames/walnut_cracked2.png";
 
-
 const float PLANT_FRAME_RATE = 0.1;
-const std::string PLANT_TYPE_1_FRAMES_ROOT = "pic/frames/sunflower_frames/";
-const std::string PLANT_TYPE_2_FRAMES_ROOT = "pic/frames/peashooter_frames/";
-const std::string PLANT_TYPE_3_FRAMES_ROOT = "pic/frames/snow_peashooter_frames/";
 const int PLANT_TYPE_1_NUM_OF_FRAMES = 31;
 const int PLANT_TYPE_2_NUM_OF_FRAMES = 20;
 const int PLANT_TYPE_3_NUM_OF_FRAMES = 18;
+const int PLANT_TYPE_5_NUM_OF_FRAMES = 13;
+
 
 
 const float SUNFLOWER_WIDTH = 80;
@@ -31,12 +31,8 @@ const float SNOW_PEASHOOTER_WIDTH = 120;
 const float SNOW_PEASHOOTER_HEIGHT = 120;
 const float WALNUT_WIDTH = 80;
 const float WALNUT_HEIGHT = 80;
-const float SUNFLOWER_DAMAGE = 5;
-const float PEASHOOTER_DAMAGE = 5;
-const float SNOW_PEASHOOTER_DAMAGE = 5;
-const float WALNUT_DAMAGE = 40;
-const float WALNUT_CRACKED1_DAMAGE = 20;
-const float WALNUT_CRACKED2_DAMAGE = 10;
+const float MELON_PULT_WIDTH = 120;
+const float MELON_PULT_HEIGHT = 120;
 
 
 
@@ -50,7 +46,7 @@ public:
 	void Load_Frames(std::string root_path , int num_of_frames);
 	void draw(sf::RenderWindow &window,float current_global_time);
 	void set_Square(std::string l , std::string s,float square_width ,float square_height);
-	Bullet* Shoot_Bullet(float current_global_time);
+	Bullet* Shoot_Bullet(float current_global_time,sf::Vector2f target_position,float target_velocity);
 	Sun* Produce_Sun(float current_global_time);
 	bool is_Act_Time(float current_global_time);
 	float get_x_Position();

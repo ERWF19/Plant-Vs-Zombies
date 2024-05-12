@@ -96,9 +96,10 @@ void Play(sf::RenderWindow &window)
 			break;
 		}
 
+		gameplay.Sort_Zombies();
 		gameplay.Plants_Fire(global_time.getElapsedTime().asSeconds());
 		gameplay.Move_Zombies();
-		gameplay.Move_Bullets();
+		gameplay.Move_Bullets(global_time.getElapsedTime().asSeconds());
 		gameplay.Move_Falling_Suns();
 		gameplay.Bullet_Impact();
 		gameplay.Zombies_Death();

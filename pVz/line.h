@@ -22,6 +22,10 @@ public:
 	void Clean_Square(Plant* plant);
 	void Add_Plant(Plant *plant);
 	void Delete_Zombie(Zombie *zombie);
+	void Sort_Zombies_By_X_Position();
+	float get_First_Zombie_Velocity();
+	sf::Vector2f get_First_Zombie_Position();
+	bool is_Zombie_Coming();
 
 private:
 	std::vector<Square *> squares;

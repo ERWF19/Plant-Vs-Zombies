@@ -15,14 +15,11 @@ const char SEPRATOR = ',';
 
 const std::string PLAYGROUND_TEXTURE_PATH = "pic/playground.png";
 const std::string THROW_SOUND = "soundeffect/throw.ogg";
-const std::string PLANT_TYPE_1_ON_CARD_PATH = "pic/cards/on_sunflower.png";
-const std::string PLANT_TYPE_1_OFF_CARD_PATH  = "pic/cards/off_sunflower.png";
-const std::string PLANT_TYPE_2_ON_CARD_PATH = "pic/cards/on_peashooter.png";
-const std::string PLANT_TYPE_2_OFF_CARD_PATH = "pic/cards/off_peashooter.png";
-const std::string PLANT_TYPE_3_ON_CARD_PATH = "pic/cards/on_snow_peashooter.png";
-const std::string PLANT_TYPE_3_OFF_CARD_PATH = "pic/cards/off_snow_peashooter.png";
-const std::string PLANT_TYPE_4_ON_CARD_PATH = "pic/cards/on_walnut.png";
-const std::string PLANT_TYPE_4_OFF_CARD_PATH = "pic/cards/off_walnut.png";
+
+const std::string PLANT_ON_CARD_ROOT = "pic/cards/on_";
+const std::string PLANT_OFF_CARD_ROOT = "pic/cards/off_";
+
+
 
 
 
@@ -64,7 +61,7 @@ public:
 	void Draw_Zombies(sf::RenderWindow &window,float current_global_time);
 	void Plants_Fire(float current_global_time);
 	Line* Find_Line(std::string line_id);
-	void Move_Bullets();
+	void Move_Bullets(float current_global_time);
 	void Draw_Bullets(sf::RenderWindow &window);
 	void Bullet_Impact();
 	void Kill_Plants(float current_global_time);
@@ -77,6 +74,9 @@ public:
 	void Load_Sun_Score();
 	void Draw_Sun_Score(sf::RenderWindow &window );
 	void Generate_Produced_Sun(float current_global_time);
+	void Sort_Zombies();
+	void Sort_By_Line();
+
 
 
 private:

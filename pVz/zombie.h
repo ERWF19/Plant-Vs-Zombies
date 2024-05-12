@@ -21,7 +21,7 @@ const float ZOMBIE_TYPE_1_DAMAGE = 10;
 const float ZOMBIE_TYPE_1_EATING_SPEED = 1;
 
 
-const int NUM_OF_FRAME_TYPE_2_WALKING = 26;
+const int NUM_OF_FRAME_TYPE_2_WALKING = 58;
 const int NUM_OF_FRAME_TYPE_2_EATING = 26;
 const float ZOMBIE_TYPE_2_WIDTH = 250;
 const float  ZOMBIE_TYPE_2_HEIGHT= 350;
@@ -62,6 +62,7 @@ public:
 	void draw(sf::RenderWindow &window ,float current_global_time);
 	bool is_get_Shot(sf::Vector2f bullet_position,std::string bullet_type,float bullet_damage);
 	float get_x_Position();
+	float get_y_Position();
 	void Stop();
 	void go_Forward();
 	void Bite(float current_global_time);
@@ -69,4 +70,5 @@ public:
 	bool Are_You_Okay();
 	bool is_House_Reached(float house_x_position);
 	float get_Damage();
+	float get_Velocity();
 };
