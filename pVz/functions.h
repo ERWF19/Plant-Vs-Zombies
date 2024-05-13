@@ -1,7 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
-#include "gameplay.h"
+#include <fstream>
+#include <sstream>
 
 
 
@@ -11,6 +12,9 @@ const float DEAD_TEXT_X_POSITION = 225;
 const float DEAD_TEXT_Y_POSITION = 60;
 const float FALLING_SUN_PRIMARY_X_POSITION = 313;
 const float FALLING_SUN_PRIMARY_Y_POSITION = 0;
+
+
+const char ACTION_OPTION_SEPRATOR = ',';
 
 
 const std::string ATTACKS_OPTION_PATH = "option/attacks_option.csv";
@@ -33,3 +37,5 @@ void Play(sf::RenderWindow &window);
 void gameover(sf::RenderWindow &window);
 void Win(sf::RenderWindow &window);
 void Read_From_File(std::vector<float> &options,std::string file_path);
+void Load_Music(sf::Music &music,std::string path);
+void Load_Sound(sf::Sound &sound,sf::SoundBuffer &buffer,std::string path);

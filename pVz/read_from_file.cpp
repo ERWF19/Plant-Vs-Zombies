@@ -11,7 +11,7 @@ void Read_From_File(std::vector<float> &options,std::string file_path)
 	getline(fin,temp_str);
 	getline(fin,temp_str);
 	std::stringstream S(temp_str);
-	while(getline(S,option_str,SEPRATOR))
+	while(getline(S,option_str,ACTION_OPTION_SEPRATOR))
 	{
 		options.push_back(std::stof(option_str));
 	}

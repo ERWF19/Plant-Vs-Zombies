@@ -5,6 +5,8 @@
 #include <time.h>
 #include "line.h"
 #include "card.h"
+#include "functions.h"
+
 
 
 
@@ -14,13 +16,10 @@ const std::string ZOMBIES_OPTION_PATH = "option/zombies_option.csv";
 const char SEPRATOR = ',';
 
 const std::string PLAYGROUND_TEXTURE_PATH = "pic/playground.png";
-const std::string THROW_SOUND = "soundeffect/throw.ogg";
+const std::string THROW_SOUND_PATH = "soundeffect/throw.ogg";
 
 const std::string PLANT_ON_CARD_ROOT = "pic/cards/on_";
 const std::string PLANT_OFF_CARD_ROOT = "pic/cards/off_";
-
-
-
 
 
 const int NUM_OF_CARDS = 5;

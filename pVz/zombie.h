@@ -20,8 +20,8 @@ const float  ZOMBIE_TYPE_1_HEIGHT= 300;
 
 const int NUM_OF_FRAME_TYPE_2_WALKING = 58;
 const int NUM_OF_FRAME_TYPE_2_EATING = 26;
-const float ZOMBIE_TYPE_2_WIDTH = 200;
-const float  ZOMBIE_TYPE_2_HEIGHT= 250;
+const float ZOMBIE_TYPE_2_WIDTH = 180;
+const float  ZOMBIE_TYPE_2_HEIGHT= 230;
 const float ZOMBIE_TYPE_2_CHANGE_Y_POSITION = -180;
 
 const float ZOMBIE_FRAME_RATE = 0.1;

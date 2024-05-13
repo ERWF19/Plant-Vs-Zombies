@@ -8,12 +8,7 @@ GamePlay::GamePlay(float width , float height)
 	Load_Background(width,height);
 	Load_Sun_Score();
 	Load_Cards();
-
-	if(!buffer.loadFromFile(THROW_SOUND))
-	{
-		std:: cout << "Error in loading throw sound !" << std::endl;
-	}
-	throw_sound.setBuffer(buffer);	
+	Load_Sound(throw_sound,buffer,THROW_SOUND_PATH);	
 }
 
 void GamePlay::Load_Background(float width , float height)

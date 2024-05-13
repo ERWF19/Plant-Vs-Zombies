@@ -1,4 +1,4 @@
-#include "functions.h"
+#include "gameplay.h"
 
 void Play(sf::RenderWindow &window)
 {
@@ -16,22 +16,14 @@ void Play(sf::RenderWindow &window)
 	sf::Clock falling_sun_periodicity;
 
 	sf::Music soundtrack;
-	if(!soundtrack.openFromFile(MAIN_SOUNDTRACK_PATH))
-	{
-		std:: cout << "Error in loading soundtrack music" << std::endl;
-	}
-	soundtrack.play();
-
-	sf::SoundBuffer buffer;
 	sf::Sound zombie_intro_sound;
+	sf::SoundBuffer buffer;
 
-	if(!buffer.loadFromFile(ZOMBIE_INTRO_SOUND_PATH))
-	{
-		std:: cout << "Error in loading zombie_intro_sound" << std::endl;
-	}
 
-	zombie_intro_sound.setBuffer(buffer);
+	Load_Music(soundtrack,MAIN_SOUNDTRACK_PATH);
+	Load_Sound(zombie_intro_sound,buffer,ZOMBIE_INTRO_SOUND_PATH);
 
+	soundtrack.play();
 
 	while(window.isOpen())
 	{
@@ -47,34 +39,44 @@ void Play(sf::RenderWindow &window)
 				window.close();
 		}
 
-		if(global_time.getElapsedTime().asSeconds() > attacks_options[1] &&  global_time.getElapsedTime().asSeconds() < attacks_options[1] + 0.02)
+		if(global_time.getElapsedTime().asSeconds() > attacks_options[1] && global_time.getElapsedTime().asSeconds() < attacks_options[1] + 0.02)
 			zombie_intro_sound.play();
 
-		if(global_time.getElapsedTime().asSeconds() <= attacks_options[0] + 1)
+		if(global_time.getElapsedTime().asSeconds() > attacks_options[1] )
 		{
-			if(wave_periodicity.getElapsedTime().asSeconds() >=  attacks_options[1])
-			{
-				for(int i=0 ; i<attacks_options[2] ; i++)
-					gameplay.Generate_Zombie();
-				attacks_options[2] += attacks_options[3];
-				wave_periodicity.restart();
+			zombie_intro_sound.play();
 
-			}
-		}
-		else 
-		{
-			if(!gameplay.is_Any_Zombie_Left())
+			if(global_time.getElapsedTime().asSeconds() <= attacks_options[0] + 1)
 			{
-				soundtrack.stop();	
-				Win(window);
-				break;
+				float periodicity = attacks_options[1] / attacks_options[2];
+
+				if(generate_zombie_periodicity.getElapsedTime().asSeconds() >=  periodicity)
+				{
+					std::cout << global_time.getElapsedTime().asSeconds() << std::endl;
+					gameplay.Generate_Zombie();
+					generate_zombie_periodicity.restart();
+					if(wave_periodicity.getElapsedTime().asSeconds() >= attacks_options[1])
+					{
+						attacks_options[2] += attacks_options[3];
+						wave_periodicity.restart();
+					}
+				}
+			}
+			else 
+			{
+				if(!gameplay.is_Any_Zombie_Left())
+				{
+					soundtrack.stop();	
+					Win(window);
+					break;
+				}
 			}
 		}
 
 		if(falling_sun_periodicity.getElapsedTime().asSeconds() >= falling_sun_options[1])
 		{
 			std::srand(time(0));
-			float sun_x_position = FALLING_SUN_PRIMARY_X_POSITION  + (std::rand() % window.getSize().x - SQUARE_LENGTH);
+			float sun_x_position = FALLING_SUN_PRIMARY_X_POSITION  + (std::rand() % window.getSize().x - (2*SQUARE_LENGTH));
 			float sun_y_position = FALLING_SUN_PRIMARY_Y_POSITION;
 			gameplay.Generate_Falling_Sun(sun_x_position,sun_y_position,falling_sun_options[0]);
 			falling_sun_periodicity.restart();
@@ -83,12 +85,7 @@ void Play(sf::RenderWindow &window)
 		if(gameplay.GameOver(HOUSE_X_POSITION))
 		{
 			sf::Sound dead_sound;
-			if(!buffer.loadFromFile(DEAD_SOUND_PATH))
-			{
-				std:: cout << "Error in loading dead_sound" << std::endl;
-			}
-			dead_sound.setBuffer(buffer);
-	
+			Load_Sound(dead_sound,buffer,DEAD_SOUND_PATH);
 			dead_sound.play();
 			soundtrack.stop();	
 			gameover(window);
@@ -110,5 +107,4 @@ void Play(sf::RenderWindow &window)
 		gameplay.draw(window,global_time.getElapsedTime().asSeconds());
 		window.display();
 	}
-
 }
