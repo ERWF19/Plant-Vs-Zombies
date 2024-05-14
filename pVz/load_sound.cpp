@@ -6,6 +6,5 @@ void Load_Sound(sf::Sound &sound,sf::SoundBuffer &buffer,std::string path)
 	{
 		std:: cout << "Error in loading sound" << std::endl;
 	}
-
 	sound.setBuffer(buffer);
 }

@@ -23,7 +23,9 @@ void Play(sf::RenderWindow &window)
 	Load_Music(soundtrack,MAIN_SOUNDTRACK_PATH);
 	Load_Sound(zombie_intro_sound,buffer,ZOMBIE_INTRO_SOUND_PATH);
 
+
 	soundtrack.play();
+
 
 	while(window.isOpen())
 	{
@@ -44,15 +46,12 @@ void Play(sf::RenderWindow &window)
 
 		if(global_time.getElapsedTime().asSeconds() > attacks_options[1] )
 		{
-			zombie_intro_sound.play();
-
 			if(global_time.getElapsedTime().asSeconds() <= attacks_options[0] + 1)
 			{
 				float periodicity = attacks_options[1] / attacks_options[2];
 
 				if(generate_zombie_periodicity.getElapsedTime().asSeconds() >=  periodicity)
 				{
-					std::cout << global_time.getElapsedTime().asSeconds() << std::endl;
 					gameplay.Generate_Zombie();
 					generate_zombie_periodicity.restart();
 					if(wave_periodicity.getElapsedTime().asSeconds() >= attacks_options[1])
