@@ -1,3 +1,6 @@
+#ifndef PLANT
+#define PLANT
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <sstream>
@@ -76,3 +79,5 @@ private:
 	float frame_rate;
 	float last_time_change_frame;
 };
+
+#endif

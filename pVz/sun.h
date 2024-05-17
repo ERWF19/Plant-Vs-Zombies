@@ -1,3 +1,6 @@
+#ifndef SUN
+#define SUN
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
@@ -22,3 +25,6 @@ public:
 	void draw(sf::RenderWindow &window );
     sf::Vector2f get_Position();
 };
+
+
+#endif

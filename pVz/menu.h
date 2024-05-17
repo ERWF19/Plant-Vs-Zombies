@@ -1,3 +1,6 @@
+#ifndef MENU
+#define MENU
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
@@ -29,3 +32,5 @@ private:
 	sf::Music menu_soundtrack;
 	sf::Texture menu_texture;
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef ZOMBIE
+#define ZOMBIE
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
@@ -72,3 +75,5 @@ public:
 	float get_Velocity();
 	void Check_Ice_Break(float current_global_time);
 };
+
+#endif

@@ -1,3 +1,5 @@
+#ifndef CARD
+#define CARD
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
@@ -31,3 +33,5 @@ private:
 	float last_time_selected;
 	float invalid_time;
 };
+
+#endif

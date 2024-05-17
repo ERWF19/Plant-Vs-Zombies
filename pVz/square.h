@@ -1,3 +1,6 @@
+#ifndef SQUARE
+#define SQUARE
+
 #include <string>
 #include "plant.h"
 
@@ -23,3 +26,6 @@ public:
 	void Clean();
 
 };
+
+
+#endif

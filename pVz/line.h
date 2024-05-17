@@ -1,3 +1,6 @@
+#ifndef LINE
+#define LINE
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
@@ -36,3 +39,5 @@ private:
 	sf::Sound eating_sound;
 
 };
+
+#endif

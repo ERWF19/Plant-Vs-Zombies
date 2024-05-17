@@ -1,3 +1,5 @@
+#ifndef BULLET
+#define BULLET
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
@@ -52,3 +54,5 @@ public:
 	std::string get_Type();
 	float get_damage();
 };
+
+#endif

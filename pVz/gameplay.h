@@ -1,3 +1,6 @@
+#ifndef GAMEPLAY
+#define GAMEPLAY
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <fstream>
@@ -102,3 +105,5 @@ private:
 	sf::SoundBuffer buffer;
 	sf::Sound throw_sound;
 };
+
+#endif

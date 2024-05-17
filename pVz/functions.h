@@ -1,3 +1,5 @@
+#ifndef FUNCTION
+#define FUNCTION
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
@@ -39,3 +41,6 @@ void Win(sf::RenderWindow &window);
 void Read_From_File(std::vector<float> &options,std::string file_path);
 void Load_Music(sf::Music &music,std::string path);
 void Load_Sound(sf::Sound &sound,sf::SoundBuffer &buffer,std::string path);
+
+
+#endif
